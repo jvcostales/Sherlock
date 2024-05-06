@@ -1,1 +1,1 @@
-web: gunicorn MMS194:app
+web: gunicorn expense_tracker:app

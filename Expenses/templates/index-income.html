@@ -109,7 +109,7 @@
                 {% endif %}
                 {% endfor %}
             </table>
-            <div class="pagination">
+<!--             <div class="pagination">
                 {% if page > 1 %}
                 <button class="prev" onclick="goToPage({{ page - 1 }})">Prev</button>
                 {% endif %}
@@ -120,10 +120,10 @@
                     {% endif %}
                     {% endfor %}
                 </div>
-                {% if expenses|length == 8 and (page * 8) < total_expenses %} <button class="next"
+                {% if values|length == 8 and (page * 8) < total_income_items %} <button class="next"
                     onclick="goToPage({{ page + 1 }})">Next</button>
                     {% endif %}
-            </div>
+            </div> -->
             <div class="popup" id="expensePopup">
                 <div class="popuptitle">
                     Add Expense

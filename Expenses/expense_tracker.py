@@ -316,7 +316,7 @@ def income():
 
     if not spreadsheet_id or not range_name:
         # Handle the case where user doesn't provide both parameters
-        return render_template("index-income.html", error="Please provide both spreadsheet ID and range name.")
+        return render_template("index-income.html", page=page, error="Please provide both spreadsheet ID and range name.")
 
     # If user provided new spreadsheet info, save it
     if spreadsheet_id != saved_spreadsheet_id or range_name != saved_range_name:
