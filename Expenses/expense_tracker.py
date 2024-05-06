@@ -1,17 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from expense import Expense
 import uuid
 import os
 import os.path
 from datetime import datetime, timedelta  # Import datetime module
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
+class Expense:
+    def __init__(self, material, quantity, price, total, date, random_id=None, spreadsheet_id=None, range_name=None):
+        self.material = material
+        self.quantity = quantity
+        self.price = price
+        self.total = total
+        self.date = date
+        self.random_id = random_id
+        self.spreadsheet_id = spreadsheet_id
+        self.range_name = range_name
+
+    def __repr__(self):
+        return f"<{self.material}, {self.quantity}, {self.price}, {self.total}, {self.date}, {self.random_id}>"
 
 app = Flask(__name__)
 app.secret_key = 'yZJPf2C6URJUvybJcZJwYb4rjwcJ6zwC'  # Set a secret key for session management
