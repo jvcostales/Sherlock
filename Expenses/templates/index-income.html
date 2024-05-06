@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-income.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="headingimage">
+                <img src="..\static\logo.png" class="logo">
+                <div class="sidebar-heading">Sherlock</div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#">
+                        <div class="icon-text-wrapper">
+                            <span class="material-symbols-outlined">space_dashboard</span>
+                            <div class="text">Dashboard</div>
+                        </div>
+                    </a></li>
+                <li><a href="#">
+                        <div class="icon-text-wrapper">
+                            <span class="material-symbols-outlined">local_mall</span>
+                            <div class="text">Income</div>
+                        </div>
+                    </a></li>
+                <li><a onclick="redirectToExpenses()">
+                        <div class="icon-text-wrapper">
+                            <span class="material-symbols-outlined">account_balance_wallet</span>
+                            <div class="text">Expenses</div>
+                        </div>
+                    </a></li>
+                <li><a href="#">
+                        <div class="icon-text-wrapper">
+                            <span class="material-symbols-outlined">bar_chart</span>
+                            <div class="text">Reports</div>
+                        </div>
+                    </a></li>
+                <li><a href="{{ url_for('logout') }}">
+                        <div class="icon-text-wrapper">
+                            <span class="material-symbols-outlined">logout</span>
+                            <div class="text">Log Out</div>
+                        </div>
+                    </a></li>
+            </ul>
+        </div>
+        <div class="mainarea">
+            <div class="topbar">
+                <div class="header">Income</div>
+                <div class="searchuser">
+                    <form>
+                        <input class="search" type="text" id="searchInput" placeholder="Search" oninput="findWord()">
+                    </form>
+                    <img src="..\static\user-image.png" class="user-image">
+                    <span class="material-symbols-outlined expand">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+            <div class="mid">
+                <div class="total">
+                    <div class="number">
+                        &#8369;{{ total_amount }}
+                    </div>
+                    <div class="label">
+                        Total
+                    </div>
+                </div>
+                <div class="buttons">
+                    <form id="filterForm" action="{{ url_for('income') }}" method="get">
+                        <div class="dropdown">
+                            <div class="filter dropbtn">Filters</div>
+                            <div class="dropdown-content">
+                                <div class="space"></div>
+                                <button type="submit" name="last_7_days" value="true">Last 7 Days</button>
+                                <button type="submit" name="last_28_days" value="true">Last 28 Days</button>
+                                <button type="submit">Lifetime</button>
+                            </div>
+                        </div>
+                    </form>
+                    <button class="select" onclick="togglePopup()">
+                        Select Sheet
+                    </button>
+                </div>
+            </div>
+            <table>
+                {% for row in values %}
+                {% if loop.first %}
+                <tr>
+                    {% for cell in row %}
+                    <th>{{ cell }}</th>
+                    {% endfor %}
+                </tr>
+                {% else %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+            <div class="pagination">
+                {% if page > 1 %}
+                <button class="prev" onclick="goToPage({{ page - 1 }})">Prev</button>
+                {% endif %}
+                <div class="numbering">
+                    {% for p in range(page - 1, page + 2) %}
+                    {% if p > 0 %}
+                    <div class="{% if p == page %}current{% endif %}" onclick="goToPage({{ p }})">{{ p }}</div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% if expenses|length == 8 and (page * 8) < total_expenses %} <button class="next"
+                    onclick="goToPage({{ page + 1 }})">Next</button>
+                    {% endif %}
+            </div>
+            <div class="popup" id="expensePopup">
+                <div class="popuptitle">
+                    Add Expense
+                </div><br>
+                <div>
+                    <form action="/income">
+                        <label for="spreadsheet_id">Spreadsheet ID:</label>
+                        <input type="text" id="spreadsheet_id" name="spreadsheet_id" required>
+                        <br>
+                        <label for="range_name">Range Name:</label>
+                        <input type="text" id="range_name" name="range_name" required>
+                        <br>
+                        <input type="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay" onclick="togglePopup()"></div>
+    <script>
+        function redirectToExpenses() {
+            window.location.href = "/";
+        }
+
+        function goToPage(page) {
+            // Perform any necessary validation or processing here
+
+            // Redirect to the URL corresponding to the selected page
+            window.location.href = '/income?page=' + page;
+        }
+    </script>
+    <script>
+        function togglePopup() {
+            var popup = document.getElementById("expensePopup");
+            var overlay = document.getElementById("overlay");
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+                overlay.style.display = "none";
+            } else {
+                popup.style.display = "block";
+                overlay.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+</html>
