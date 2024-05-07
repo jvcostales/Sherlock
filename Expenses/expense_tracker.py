@@ -33,6 +33,11 @@ login_manager.init_app(app)
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('index-dashboard.html')
+
 
 """ EXPENSES SECTION """
 users = {

@@ -21,7 +21,7 @@
                 <div class="sidebar-heading">Sherlock</div>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="#">
+                <li><a onclick="redirectToDashboard()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">space_dashboard</span>
                             <div class="text">Dashboard</div>
@@ -166,6 +166,11 @@
                 popup.style.display = "block";
                 overlay.style.display = "block";
             }
+        }
+    </script>
+    <script>
+        function redirectToDashboard() {
+            window.location.href = "/dashboard";
         }
     </script>
 </body>

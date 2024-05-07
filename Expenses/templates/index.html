@@ -21,7 +21,7 @@
                 <div class="sidebar-heading">Sherlock</div>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="#">
+                <li><a onclick="redirectToDashboard()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">space_dashboard</span>
                             <div class="text">Dashboard</div>
@@ -126,31 +126,27 @@
             </table>
             <div class="pagination">
                 {% if page > 1 %}
-                    {% if last_7_days %}
-                        <button class="prev" onclick="goToPage({{ page - 1 }}, true, false)">Prev</button>
-                    {% elif last_28_days %}
-                        <button class="prev" onclick="goToPage({{ page - 1 }}, false, true)">Prev</button>
-                    {% else %}
-                        <button class="prev" onclick="goToPage({{ page - 1 }}, false, false)">Prev</button>
-                    {% endif %}
+                {% if last_7_days %}
+                <button class="prev" onclick="goToPage({{ page - 1 }}, true, false)">Prev</button>
+                {% elif last_28_days %}
+                <button class="prev" onclick="goToPage({{ page - 1 }}, false, true)">Prev</button>
+                {% else %}
+                <button class="prev" onclick="goToPage({{ page - 1 }}, false, false)">Prev</button>
+                {% endif %}
                 {% endif %}
                 <div class="numbering">
                     <div class="numberlabel1">{{ page - 1 }}</div>
                     <div>{{ page }}</div>
                     <div class="numberlabel2">{{ page + 1 }}</div>
                 </div>
-                {% if expenses|length == 8 and (page * 8) < total_expenses %}
-                    {% if last_7_days %}
-                        <button class="next"
-                        onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
-                    {% elif last_28_days %}    
-                        <button class="next"
-                        onclick="goToPage({{ page + 1 }}, false, true)">Next</button>
+                {% if expenses|length == 8 and (page * 8) < total_expenses %} {% if last_7_days %} <button class="next"
+                    onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
+                    {% elif last_28_days %}
+                    <button class="next" onclick="goToPage({{ page + 1 }}, false, true)">Next</button>
                     {% else %}
-                        <button class="next"
-                        onclick="goToPage({{ page + 1 }}, false, false)">Next</button>
+                    <button class="next" onclick="goToPage({{ page + 1 }}, false, false)">Next</button>
                     {% endif %}
-                {% endif %}
+                    {% endif %}
             </div>
             {% else %}
             <div class="no-expense">
@@ -275,6 +271,11 @@
 <script>
     function redirectToIncome() {
         window.location.href = "/income";
+    }
+</script>
+<script>
+    function redirectToDashboard() {
+        window.location.href = "/dashboard";
     }
 </script>
 </body>
