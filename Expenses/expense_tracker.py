@@ -196,8 +196,7 @@ def load_expenses(page):
                 date = datetime.strptime(date_str, '%Y-%m-%d')  # Convert date string to datetime object
                 total_amount += float(total)
                 expenses.append(Expense(material=material, quantity=int(quantity), price=float(price),
-                                        total=float(total), date=date, random_id=ran))
-                
+                                        total=float(total), date=date, random_id=ran))        
     return expenses, total_expenses, total_amount
 
 def load_expenses_last_7_days(page):
@@ -351,7 +350,7 @@ def income():
         # Fetch all data
         values = get_sheet_data(spreadsheet_id, range_name, page)
     
-    return render_template("index-income.html", values=values, page=page)
+    return render_template("index-income.html", values=values, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 def get_sheet_data(spreadsheet_id, range_name, page):
     creds = None
@@ -449,7 +448,7 @@ def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
                         break
             except (ValueError, IndexError):
                 pass
-
+    
     return filtered_values
 
 def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):

@@ -139,14 +139,15 @@
                     <div>{{ page }}</div>
                     <div class="numberlabel2">{{ page + 1 }}</div>
                 </div>
-                {% if expenses|length == 8 and (page * 8) < total_expenses %} {% if last_7_days %} <button class="next"
-                    onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
-                    {% elif last_28_days %}
-                    <button class="next" onclick="goToPage({{ page + 1 }}, false, true)">Next</button>
-                    {% else %}
-                    <button class="next" onclick="goToPage({{ page + 1 }}, false, false)">Next</button>
-                    {% endif %}
-                    {% endif %}
+                {% if page <= 1 %}
+                {% if last_7_days %} 
+                <button class="next" onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
+                {% elif last_28_days %}
+                <button class="next" onclick="goToPage({{ page + 1 }}, false, true)">Next</button>
+                {% else %}
+                <button class="next" onclick="goToPage({{ page + 1 }}, false, false)">Next</button>
+                {% endif %}
+                {% endif %}
             </div>
             {% else %}
             <div class="no-expense">

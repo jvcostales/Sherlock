@@ -1,3 +1,4 @@
+
 body {
     width: 100vw;
     height: 100vh;
@@ -85,6 +86,17 @@ body {
         'GRAD' 0,
         'opsz' 40
 }
+
+@media screen and (max-width:1200px) {
+    .container {
+      width: 100%;
+      grid-template-columns: 7.5rem auto;
+    }
+  
+    .text, .sidebar-heading {
+      display: none;
+    }
+  }
 
 .mainarea {
     background-color: #EFF2FB;

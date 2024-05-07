@@ -394,6 +394,7 @@ table {
     font-family: 'Outfit', sans-serif;
     font-size: 1.125rem;
     font-weight: 600;
+    background-color: transparent;
   }
   
   .numbering {

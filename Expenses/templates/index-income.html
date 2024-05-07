@@ -109,21 +109,32 @@
                 {% endif %}
                 {% endfor %}
             </table>
-<!--             <div class="pagination">
+            <div class="pagination">
                 {% if page > 1 %}
-                <button class="prev" onclick="goToPage({{ page - 1 }})">Prev</button>
+                {% if last_7_days %}
+                <button class="prev" onclick="goToPage({{ page - 1 }}, true, false)">Prev</button>
+                {% elif last_28_days %}
+                <button class="prev" onclick="goToPage({{ page - 1 }}, false, true)">Prev</button>
+                {% else %}
+                <button class="prev" onclick="goToPage({{ page - 1 }}, false, false)">Prev</button>
+                {% endif %}
                 {% endif %}
                 <div class="numbering">
-                    {% for p in range(page - 1, page + 2) %}
-                    {% if p > 0 %}
-                    <div class="{% if p == page %}current{% endif %}" onclick="goToPage({{ p }})">{{ p }}</div>
-                    {% endif %}
-                    {% endfor %}
+                    <div class="numberlabel1">{{ page - 1 }}</div>
+                    <div>{{ page }}</div>
+                    <div class="numberlabel2">{{ page + 1 }}</div>
                 </div>
-                {% if values|length == 8 and (page * 8) < total_income_items %} <button class="next"
-                    onclick="goToPage({{ page + 1 }})">Next</button>
-                    {% endif %}
-            </div> -->
+                {% if page <= 1 %}
+                {% if last_7_days %} 
+                <button class="next" onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
+                {% elif last_28_days %}
+                <button class="next" onclick="goToPage({{ page + 1 }}, false, true)">Next</button>
+                {% else %}
+                <button class="next" onclick="goToPage({{ page + 1 }}, false, false)">Next</button>
+                {% endif %}
+                {% endif %}
+            </div>
+
             <div class="popup" id="expensePopup">
                 <div class="popuptitle">
                     Add Expense
@@ -147,13 +158,15 @@
         function redirectToExpenses() {
             window.location.href = "/";
         }
-
-        function goToPage(page) {
-            // Perform any necessary validation or processing here
-
-            // Redirect to the URL corresponding to the selected page
-            window.location.href = '/income?page=' + page;
+    function goToPage(page, last7days, last28days) {
+        if (last7days) {
+            window.location.href = "/income?page=" + page + "&last_7_days=true";
+        } else if (last28days) {
+            window.location.href = "/income?page=" + page + "&last_28_days=true";
+        } else {
+            window.location.href = "/income?page=" + page;
         }
+    }
     </script>
     <script>
         function togglePopup() {
