@@ -105,6 +105,29 @@
                         </div>
                     </div>
                     <div class="comparison">
+                        <div class="percentdatavs">
+                            <div class="incomepercentlabel">
+                                <div class="incomepercent">
+                                    {{ total_income_percentage }}%
+                                </div>
+                                <div class="incomelabel">
+                                    Income
+                                </div>
+                            </div>
+                            <div class="vs">VS</div>
+                            <div class="expensespercentlabel">
+                                <div class="expensespercent">
+                                    {{ total_amount_percentage }}%
+                                </div>
+                                <div class="expenseslabel">
+                                    Expenses
+                                </div>
+                            </div>
+                        </div>
+                        <div class="percentbar">
+                            <div class="incomepercentbar" style="width: {{ total_income_percentage }}%"></div>
+                            <div class="expensespercentbar" style="width: {{ total_amount_percentage }}%"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="bottomright">
