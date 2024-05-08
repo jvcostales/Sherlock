@@ -69,7 +69,7 @@
             <div class="mid">
                 <div class="total">
                     <div class="number">
-                        &#8369;{{ total_amount }}
+                        &#8369;{{ total_income }}
                     </div>
                     <div class="label">
                         Total
@@ -92,6 +92,7 @@
                     </button>
                 </div>
             </div>
+            {% if income %}
             <table>
                 {% for row in values %}
                 {% if loop.first %}
@@ -134,22 +135,26 @@
                 {% endif %}
                 {% endif %}
             </div>
-
-            <div class="popup" id="expensePopup">
-                <div class="popuptitle">
-                    Add Expense
-                </div><br>
-                <div>
-                    <form action="/income">
-                        <label for="spreadsheet_id">Spreadsheet ID:</label>
-                        <input type="text" id="spreadsheet_id" name="spreadsheet_id" required>
-                        <br>
-                        <label for="range_name">Range Name:</label>
-                        <input type="text" id="range_name" name="range_name" required>
-                        <br>
-                        <input type="submit">
-                    </form>
-                </div>
+            {% else %}
+            <div class="no-income">
+                <p>Nothing to show here.</p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="popup" id="expensePopup">
+            <div class="popuptitle">
+                Add Expense
+            </div><br>
+            <div>
+                <form action="/income">
+                    <label for="spreadsheet_id">Spreadsheet ID:</label>
+                    <input type="text" id="spreadsheet_id" name="spreadsheet_id" required>
+                    <br>
+                    <label for="range_name">Range Name:</label>
+                    <input type="text" id="range_name" name="range_name" required>
+                    <br>
+                    <input type="submit">
+                </form>
             </div>
         </div>
     </div>

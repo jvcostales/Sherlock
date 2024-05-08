@@ -32,12 +32,27 @@ login_manager.init_app(app)
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
-
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('index-dashboard.html')
+    # Fetch the spreadsheet info associated with the current user
+    username = current_user.id
+    spreadsheet_id, range_name = get_spreadsheet_info(username)
+    page = request.args.get('page', 1, type=int)
+    expenses, total_expenses, total_amount = load_expenses(page)
 
+    # Fetch total income from Google Sheets API
+    if spreadsheet_id and range_name:
+        values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page=1)
+    else:
+        total_income = 0  # Set total income to 0 if no spreadsheet info found
+        total_amount = 0
+        
+    total_combined = total_income + total_amount
+    total_income_percentage = (total_income / total_combined) * 100
+    total_amount_percentage = (total_amount / total_combined) * 100  
+    
+    return render_template('index-dashboard.html', total_income=total_income, total_amount=total_amount, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
 
 """ EXPENSES SECTION """
 users = {
@@ -341,16 +356,16 @@ def income():
     # Fetch data based on user's selection
     if last_7_days:
         # Fetch data for the last 7 days
-        values = get_sheet_data_last_7_days(spreadsheet_id, range_name, page)
+        values, income, total_income = get_sheet_data_last_7_days(spreadsheet_id, range_name, page)
 
     elif last_28_days:
-        values = get_sheet_data_last_28_days(spreadsheet_id, range_name, page)
+        values, income, total_income = get_sheet_data_last_28_days(spreadsheet_id, range_name, page)
 
     else:
         # Fetch all data
-        values = get_sheet_data(spreadsheet_id, range_name, page)
+        values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page)
     
-    return render_template("index-income.html", values=values, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
+    return render_template("index-income.html", values=values, income=income, total_income=total_income, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 def get_sheet_data(spreadsheet_id, range_name, page):
     creds = None
@@ -393,8 +408,16 @@ def get_sheet_data(spreadsheet_id, range_name, page):
         paginated_values.append(values[0])  # Include the header row
         for row_index in range(start_index, min(end_index, len(values))):
             paginated_values.append(values[row_index])
+            
+    total_income = 0
+    if paginated_values:
+        for row in paginated_values[1:]:  # Exclude the header row
+            try:
+                total_income += float(row[4])  # Assuming amount is in the 5th column
+            except (ValueError, IndexError):
+                pass
 
-    return paginated_values
+    return paginated_values, income, total_income
 
 def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
     creds = None
@@ -448,8 +471,16 @@ def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
                         break
             except (ValueError, IndexError):
                 pass
+            
+    total_income = 0
+    if filtered_values:
+        for row in filtered_values[1:]:  # Exclude the header row
+            try:
+                total_income += float(row[4])  # Assuming amount is in the 5th column
+            except (ValueError, IndexError):
+                pass
     
-    return filtered_values
+    return filtered_values, income, total_income
 
 def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
     creds = None
@@ -504,6 +535,15 @@ def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
             except (ValueError, IndexError):
                 pass
 
-    return filtered_values
+    total_income = 0
+    if filtered_values:
+        for row in filtered_values[1:]:  # Exclude the header row
+            try:
+                total_income += float(row[4])  # Assuming amount is in the 5th column
+            except (ValueError, IndexError):
+                pass
+
+    return filtered_values, income, total_income
+
 if __name__ == "__main__":
     app.run(debug=True)

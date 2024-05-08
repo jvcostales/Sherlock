@@ -421,3 +421,23 @@ table {
   .numberlabel2 {
     margin-right: 25px;
   }
+
+  .no-income {
+    margin-left: 3rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    background-color: white;
+    width: calc(100% - 12rem);
+    border: none;
+    outline: none;
+    border-spacing: 0;
+    border-radius: 5px;
+    color: #3C464E;
+    font-family: 'Outfit', sans-serif;
+    text-align: center;
+  }
+  

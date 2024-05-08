@@ -68,7 +68,7 @@
             </div>
             <div class="hello">
                 <div class="greeting">
-                    Hello, Entwine! <!-- make this username -->
+                    Hello, {{ username }}!
                 </div>
                 <div class="comment">
                     Let's make this day productive.
@@ -76,35 +76,35 @@
             </div>
             <div class="bottom">
                 <div class="bottomleft">
-                    <div class="totaltitle">
-                        Total
-                    </div>
                     <div class="totalboxes">
-                        <div class="total1">
-                            <div class="number">
-                                &#8369;<!-- {{ total_amount }} -->00.00
-                            </div>
-                            <div class="label">
+                        <div class="incomebox">
+                            <div class="incometitle">
                                 Income
                             </div>
-                        </div>
-                        <div class="total2">
-                            <div class="number">
-                                &#8369;<!-- {{ total_amount }} -->00.00
+                            <div class="total1">
+                                <div class="number">
+                                    &#8369;{{ total_income }}
+                                </div>
+                                <div class="label">
+                                    Total
+                                </div>
                             </div>
-                            <div class="label">
+                        </div>
+                        <div class="expensesbox">
+                            <div class="expensestitle">
                                 Expenses
                             </div>
+                            <div class="total2">
+                                <div class="number">
+                                    &#8369;{{ total_amount }}
+                                </div>
+                                <div class="label">
+                                    Total
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="latesttitle">
-                        Latest
-                    </div>
-                    <div class="latestboxes">
-                        <div class="latest">
-                        </div>
-                        <div class="latest">
-                        </div>
+                    <div class="comparison">
                     </div>
                 </div>
                 <div class="bottomright">

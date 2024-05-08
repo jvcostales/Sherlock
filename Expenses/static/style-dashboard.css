@@ -180,15 +180,24 @@ body {
     display: flex;
     align-items: center;
     justify-content: left;
+    margin-left: 3rem;
 }
 
-.totaltitle {
+.incometitle {
     color: #3C464E;
     font-family: 'Outfit', sans-serif;
     font-size: 1.5rem;
-    font-weight: 600;
-    margin-left: 3rem;
+    font-weight: 500;
     margin-bottom: 20px;
+}
+
+.expensestitle {
+    color: #3C464E;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    margin-left: 10px;
 }
 
 .total1 {
@@ -201,7 +210,6 @@ body {
     outline: none;
     border-radius: 5px;
     background-color: white;
-    margin-left: 3rem;
 }
 
 .total2 {
@@ -259,7 +267,6 @@ body {
 
 .bottom {
     display: flex;
-    align-items: center;
     justify-content: space-between;
 }
 
