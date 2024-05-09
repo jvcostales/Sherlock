@@ -10,6 +10,8 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import boto3
+from botocore.exceptions import ClientError
 
 class Expense:
     def __init__(self, material, quantity, price, total, date, random_id=None, spreadsheet_id=None, range_name=None):
@@ -29,6 +31,7 @@ app = Flask(__name__)
 app.secret_key = 'yZJPf2C6URJUvybJcZJwYb4rjwcJ6zwC'  # Set a secret key for session management
 login_manager = LoginManager()
 login_manager.init_app(app)
+s3 = boto3.client('s3')
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
@@ -36,27 +39,30 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 @login_required
 def dashboard():
     # Fetch the spreadsheet info associated with the current user
-    username = current_user.id
-    spreadsheet_id, range_name = get_spreadsheet_info(username)
-    page = request.args.get('page', 1, type=int)
-    expenses, total_expenses, total_amount = load_expenses(page)
+    if current_user.is_authenticated:
+        username = current_user.id
+        spreadsheet_id, range_name = get_spreadsheet_info(username)
+        page = request.args.get('page', 1, type=int)
+        expenses, total_expenses, total_amount = load_expenses(page)
 
-    # Fetch total income from Google Sheets API
-    if spreadsheet_id and range_name:
-        values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page=1)
+        # Fetch total income from Google Sheets API
+        if spreadsheet_id and range_name:
+            values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page=1)
+        else:
+            total_income = 0  # Set total income to 0 if no spreadsheet info found
+            total_amount = 0
+        
+        if total_income and total_amount != 0:    
+            total_combined = total_income + total_amount
+            total_income_percentage = round((total_income / total_combined) * 100)
+            total_amount_percentage = round((total_amount / total_combined) * 100)
+        else:
+            total_income_percentage = 0
+            total_amount_percentage = 0     
+        
+        return render_template('index-dashboard.html', total_income=total_income, total_amount=total_amount, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
     else:
-        total_income = 0  # Set total income to 0 if no spreadsheet info found
-        total_amount = 0
-    
-    if total_income and total_amount != 0:    
-        total_combined = total_income + total_amount
-        total_income_percentage = round((total_income / total_combined) * 100)
-        total_amount_percentage = round((total_amount / total_combined) * 100)
-    else:
-        total_income_percentage = 0
-        total_amount_percentage = 0     
-    
-    return render_template('index-dashboard.html', total_income=total_income, total_amount=total_amount, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
+        return redirect(url_for('login'))
 
 """ EXPENSES SECTION """
 users = {
@@ -83,7 +89,7 @@ def load_user(user_id):
 
 from flask import render_template
 
-@app.route('/')
+@app.route('/expenses')
 def main():
     if current_user.is_authenticated:
         page = request.args.get('page', 1, type=int)
@@ -115,7 +121,7 @@ def login():
             user = User()
             user.id = username
             login_user(user)
-            return redirect(url_for('main'))
+            return redirect(url_for('dashboard'))
         else:
             # Authentication failed, show error message
             return 'Invalid username or password!'
@@ -132,25 +138,34 @@ def signup():
         else:
             users[username] = {'username': username, 'password': generate_password_hash(password)}
             
-            # Append user information to the CSV file
-            with open("users.csv", "a") as f:
-                f.write(f"{username},{generate_password_hash(password)}\n")
-            
-            # Create a unique CSV file for the user
-            user_csv_filename = f"{username}_expenses.csv"
-            user_csv_path = os.path.join("Expenses", user_csv_filename)
-            with open(user_csv_path, "w") as f:
-                # Write header to the CSV file
-                f.write("Material,Quantity,Price,Total,Date,Random_ID\n")
-            
-            """ user_info_filename = f"{username}_spreadsheet.csv"
-            user_info_path = os.path.join("Expenses", user_info_filename)
-            with open(user_info_path, "w") as f:
-                # Write header to the spreadsheet CSV file
-                f.write("Spreadsheet_ID,Range_Name\n") """
+            # Append user information to the CSV file in S3 bucket
+            try:
+                # Download the existing users.csv from S3
+                s3.download_file('your-bucket-name', 'users.csv', '/tmp/users.csv')
+                
+                # Append new user information to the downloaded file
+                with open("/tmp/users.csv", "a") as f:
+                    f.write(f"{username},{generate_password_hash(password)}\n")
+                
+                # Upload the updated users.csv back to S3
+                s3.upload_file('/tmp/users.csv', 'your-bucket-name', 'users.csv')
+                
+                # Clean up the temporary file
+                os.remove("/tmp/users.csv")
+                
+                # Create a unique CSV file for the user
+                user_csv_filename = f"{username}_expenses.csv"
+                user_csv_path = os.path.join("Expenses", user_csv_filename)
+                with open(user_csv_path, "w") as f:
+                    # Write header to the CSV file
+                    f.write("Material,Quantity,Price,Total,Date,Random_ID\n")
+                
+                # Redirect to login page after successful signup
+                return redirect(url_for('login'))
+            except ClientError as e:
+                # Handle any errors
+                return 'Error: Unable to signup at the moment.'
 
-            # Redirect to login page after successful signup
-            return redirect(url_for('login'))
     # If GET request, render the signup page
     return render_template('signup.html')
 
@@ -185,14 +200,34 @@ def submit():
                           total=expense_total, date=expense_date, random_id=random_id)
     
     save_expense(new_expense)
-    return redirect(url_for('main'))
+    
+    # Check if last 7 days or last 28 days filter is active
+    last_7_days = request.args.get('last_7_days', False, type=bool)
+    last_28_days = request.args.get('last_28_days', False, type=bool)
+    
+    if last_7_days:
+        return redirect('/expenses?last_7_days=True')
+    elif last_28_days:
+        return redirect('/expenses?last_28_days=True')
+    else:
+        return redirect('/expenses')
 
 @app.route('/delete', methods=['POST'])
 def delete():
     random_id_to_delete = request.form.get('random_id')
     delete_expense(random_id_to_delete)
-    return redirect(url_for('main'))
-
+    
+    # Check if last 7 days or last 28 days filter is active
+    last_7_days = request.args.get('last_7_days', False, type=bool)
+    last_28_days = request.args.get('last_28_days', False, type=bool)
+    
+    if last_7_days:
+        return redirect('/expenses?last_7_days=True')
+    elif last_28_days:
+        return redirect('/expenses?last_28_days=True')
+    else:
+        return redirect('/expenses')
+    
 def load_expenses(page):
     expenses_per_page = 8
     start_index = (page - 1) * expenses_per_page

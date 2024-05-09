@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expenses</title>
+    <title>Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
                             <div class="text">Income</div>
                         </div>
                     </a></li>
-                <li><a href="#">
+                <li><a onclick="redirectToExpenses()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">account_balance_wallet</span>
                             <div class="text">Expenses</div>
@@ -159,6 +159,9 @@
     <script>
         function redirectToIncome() {
             window.location.href = "/income";
+        }
+        function redirectToExpenses() {
+            window.location.href = "/expenses";
         }
     </script>
     <script>
