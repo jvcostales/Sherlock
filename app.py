@@ -32,6 +32,13 @@ login_manager.init_app(app)
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
+@app.route('/')
+def main():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('login'))
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -87,7 +94,7 @@ def load_user(user_id):
 from flask import render_template
 
 @app.route('/expenses')
-def main():
+def expenses():
     if current_user.is_authenticated:
         page = request.args.get('page', 1, type=int)
         last_7_days = request.args.get('last_7_days', False, type=bool)
