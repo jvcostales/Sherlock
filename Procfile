@@ -1,1 +1,1 @@
-web: gunicorn Expenses.expense_tracker:app
+web: gunicorn Expenses.sherlock-finance-system:app
