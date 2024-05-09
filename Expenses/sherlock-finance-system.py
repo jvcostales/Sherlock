@@ -141,17 +141,17 @@ def signup():
             # Append user information to the CSV file in S3 bucket
             try:
                 # Download the existing users.csv from S3
-                s3.download_file('your-bucket-name', 'users.csv', '/tmp/users.csv')
+                s3.download_file('sherlock-finance-system', 'users.csv', '/users.csv')
                 
                 # Append new user information to the downloaded file
-                with open("/tmp/users.csv", "a") as f:
+                with open("/users.csv", "a") as f:
                     f.write(f"{username},{generate_password_hash(password)}\n")
                 
                 # Upload the updated users.csv back to S3
-                s3.upload_file('/tmp/users.csv', 'your-bucket-name', 'users.csv')
+                s3.upload_file('/users.csv', 'sherlock-finance-system', 'users.csv')
                 
                 # Clean up the temporary file
-                os.remove("/tmp/users.csv")
+                os.remove("/users.csv")
                 
                 # Create a unique CSV file for the user
                 user_csv_filename = f"{username}_expenses.csv"
@@ -171,11 +171,23 @@ def signup():
 
 def load_user_info():
     user_info = {}
-    with open("users.csv", "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            username, password_hash = line.strip().split(',')
-            user_info[username] = {'username': username, 'password': password_hash}
+    try:
+        # Download users.csv from S3
+        s3 = boto3.client('s3')
+        s3.download_file('sherlock-finance-system', 'users.csv', '/users.csv')
+
+        # Read user information from the downloaded file
+        with open("/users.csv", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                username, password_hash = line.strip().split(',')
+                user_info[username] = {'username': username, 'password': password_hash}
+
+        # Clean up the temporary file
+        os.remove("/users.csv")
+    except ClientError as e:
+        # Handle any errors
+        print(f"Error: {e}")
     return user_info
 
 @app.route('/logout')
