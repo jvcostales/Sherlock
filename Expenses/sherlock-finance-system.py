@@ -10,8 +10,6 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import boto3
-from botocore.exceptions import ClientError
 
 class Expense:
     def __init__(self, material, quantity, price, total, date, random_id=None, spreadsheet_id=None, range_name=None):
@@ -31,7 +29,6 @@ app = Flask(__name__)
 app.secret_key = 'yZJPf2C6URJUvybJcZJwYb4rjwcJ6zwC'  # Set a secret key for session management
 login_manager = LoginManager()
 login_manager.init_app(app)
-s3 = boto3.client('s3')
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
@@ -138,56 +135,35 @@ def signup():
         else:
             users[username] = {'username': username, 'password': generate_password_hash(password)}
             
-            # Append user information to the CSV file in S3 bucket
-            try:
-                # Download the existing users.csv from S3
-                s3.download_file('sherlock-finance-system', 'users.csv', '/users.csv')
-                
-                # Append new user information to the downloaded file
-                with open("/users.csv", "a") as f:
-                    f.write(f"{username},{generate_password_hash(password)}\n")
-                
-                # Upload the updated users.csv back to S3
-                s3.upload_file('/users.csv', 'sherlock-finance-system', 'users.csv')
-                
-                # Clean up the temporary file
-                os.remove("/users.csv")
-                
-                # Create a unique CSV file for the user
-                user_csv_filename = f"{username}_expenses.csv"
-                user_csv_path = os.path.join("Expenses", user_csv_filename)
-                with open(user_csv_path, "w") as f:
-                    # Write header to the CSV file
-                    f.write("Material,Quantity,Price,Total,Date,Random_ID\n")
-                
-                # Redirect to login page after successful signup
-                return redirect(url_for('login'))
-            except ClientError as e:
-                # Handle any errors
-                return 'Error: Unable to signup at the moment.'
+            # Append user information to the CSV file
+            with open("users.csv", "a") as f:
+                f.write(f"{username},{generate_password_hash(password)}\n")
+            
+            # Create a unique CSV file for the user
+            user_csv_filename = f"{username}_expenses.csv"
+            user_csv_path = os.path.join("Expenses", user_csv_filename)
+            with open(user_csv_path, "w") as f:
+                # Write header to the CSV file
+                f.write("Material,Quantity,Price,Total,Date,Random_ID\n")
+            
+            """ user_info_filename = f"{username}_spreadsheet.csv"
+            user_info_path = os.path.join("Expenses", user_info_filename)
+            with open(user_info_path, "w") as f:
+                # Write header to the spreadsheet CSV file
+                f.write("Spreadsheet_ID,Range_Name\n") """
 
+            # Redirect to login page after successful signup
+            return redirect(url_for('login'))
     # If GET request, render the signup page
     return render_template('signup.html')
 
 def load_user_info():
     user_info = {}
-    try:
-        # Download users.csv from S3
-        s3 = boto3.client('s3')
-        s3.download_file('sherlock-finance-system', 'users.csv', '/users.csv')
-
-        # Read user information from the downloaded file
-        with open("/users.csv", "r") as f:
-            lines = f.readlines()
-            for line in lines:
-                username, password_hash = line.strip().split(',')
-                user_info[username] = {'username': username, 'password': password_hash}
-
-        # Clean up the temporary file
-        os.remove("/users.csv")
-    except ClientError as e:
-        # Handle any errors
-        print(f"Error: {e}")
+    with open("users.csv", "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            username, password_hash = line.strip().split(',')
+            user_info[username] = {'username': username, 'password': password_hash}
     return user_info
 
 @app.route('/logout')
