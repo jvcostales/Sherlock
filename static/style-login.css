@@ -51,6 +51,7 @@ input[type=password] {
     outline: none;
     border-radius: 5px;
     background-color: white;
+    box-sizing: border-box;
 }
 
 .smallspace {
@@ -61,7 +62,7 @@ input[type=submit] {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 400px;
+    width: 375px;
     height: 50px;
     border: none;
     outline: none;
@@ -74,7 +75,7 @@ input[type=submit] {
     text-align: center;
 }
 
-p {
+.noacc {
     font-family: 'Outfit', sans-serif;
     font-weight: 400;
     font-size: 1.125rem;
@@ -82,10 +83,31 @@ p {
     text-align: center;
 }
 
+.noacc a {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    color: #4C44B1;
+    text-align: inherit;
+    text-decoration: underline;
+}
+
 /* Media query for smaller screens */
 @media screen and (max-width: 768px) {
-    .left, .right {
+    .right {
         float: none;
         width: 100%;
+    }
+    .left {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .right {
+        width: 60vw;
+    }
+    .left {
+        width: 40vw;
     }
 }

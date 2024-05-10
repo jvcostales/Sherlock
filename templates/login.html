@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style-login.css') }}">
     <title>Login</title>
 </head>
+
 <body>
     <div class="left">
     </div>
     <div class="right">
         <div class="login">
             <div class="logintitle">Login</div>
-            <div class="space"></div>
+            <div class="mediumspace"></div>
             <form action="/login" method="post">
                 <input type="text" placeholder="Username" id="username" name="username"><br>
                 <div class="smallspace"></div>
@@ -21,8 +23,34 @@
                 <input type="submit" value="Login">
             </form>
             <div class="mediumspace"></div>
-            <p>Don't have an account yet? <a href="/signup">Sign up</a></p>
-        </div>    
-    </div>    
+            <div class="noacc">Don't have an account yet? <a href="/signup">Sign up</a></div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('resize', function () {
+            var screenWidth = window.innerWidth;
+
+            // Adjust styles for screen widths less than or equal to 768px
+            if (screenWidth <= 768) {
+                document.querySelector('.right').style.float = 'none';
+                document.querySelector('.right').style.width = '100%';
+                document.querySelector('.left').style.display = 'none';
+            }
+            // Adjust styles for screen widths between 769px and 1200px
+            else if (screenWidth > 768 && screenWidth <= 1200) {
+                document.querySelector('.right').style.width = '60vw';
+                document.querySelector('.left').style.width = '40vw';
+                document.querySelector('.left').style.display = 'block'; // Ensure left is visible
+            }
+            // Reset styles for screen widths larger than 1200px
+            else {
+                document.querySelector('.right').style.float = 'right';
+                document.querySelector('.right').style.width = '50vw';
+                document.querySelector('.left').style.width = '50vw';
+                document.querySelector('.left').style.display = 'flex'; // Ensure left is visible
+            }
+        });
+    </script>
 </body>
+
 </html>
