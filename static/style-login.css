@@ -1,0 +1,82 @@
+body {
+    margin: 0;
+}
+
+.left {
+    float: left;
+    width: 50vw;
+    height:100vh;
+    background-color: #4C44B1;
+}
+
+.right {
+    float: right;
+    width: 50vw;
+    height:100vh;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logintitle {
+    color: #3C464E;
+    font-family: 'Outfit', sans-serif;
+    font-size: 3rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.space {
+    height: 3rem;
+}
+
+.mediumspace {
+    height: 2rem;
+}
+
+input[type=text],
+input[type=password] {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 1.125rem;
+    padding-left: 20px;
+    width: 375px; /* corrected typo: '375x' to '375px' */
+    height: 50px;
+    border: 1px solid #9da3a7; /* Set the border color and width */
+    outline: none;
+    border-radius: 5px;
+    background-color: white;
+    /* background-image: url('home-assets/search.svg');
+    background-position: 10px;
+    background-repeat: no-repeat; */
+}
+
+.smallspace {
+    height: 20px;
+}
+
+input[type=submit] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 50px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background-color: #4C44B1;
+    color:#ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+p {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: #9da3a7;
+    text-align: center;
+}

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import uuid
+import re
 import os
 import os.path
 from datetime import datetime, timedelta  # Import datetime module
@@ -138,6 +139,13 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        
+        # Validate username and password length
+        if not (6 <= len(username) <= 20):
+            return 'Username must be 6 to 20 characters long!'
+        if not (6 <= len(password) <= 20):
+            return 'Password must be 6 to 20 characters long!'
+        
         if username in users:
             return 'Username already exists!'
         else:

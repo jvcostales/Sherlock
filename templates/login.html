@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-login.css') }}">
     <title>Login</title>
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="/login" method="post">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">
-    </form>
-    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+    <div class="left"></div>
+    <div class="right">
+        <div class="login">
+            <div class="logintitle">Login</div>
+            <div class="space"></div>
+            <form action="/login" method="post">
+                <input type="text" placeholder="Username" id="username" name="username"><br>
+                <div class="smallspace"></div>
+                <input type="password" placeholder="Password" id="password" name="password"><br><br>
+                <input type="submit" value="Login">
+            </form>
+            <div class="mediumspace"></div>
+            <p>Don't have an account yet? <a href="/signup">Sign up</a></p>
+        </div>    
+    </div>    
 </body>
 </html>
