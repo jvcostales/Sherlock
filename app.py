@@ -152,7 +152,7 @@ def signup():
             users[username] = {'username': username, 'password': generate_password_hash(password)}
             
             # Append user information to the CSV file
-            with open("users.csv", "a") as f:
+            with open(RENDER_DISK_PATH, "users.csv", "a") as f:
                 f.write(f"{username},{generate_password_hash(password)}\n")
             
             # Create a unique CSV file for the user
@@ -175,7 +175,7 @@ def signup():
 
 def load_user_info():
     user_info = {}
-    with open("users.csv", "r") as f:
+    with open(RENDER_DISK_PATH, "users.csv", "r") as f:
         lines = f.readlines()
         for line in lines:
             username, password_hash = line.strip().split(',')
