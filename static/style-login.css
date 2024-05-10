@@ -1,3 +1,4 @@
+/* Standard styling */
 body {
     margin: 0;
 }
@@ -44,15 +45,12 @@ input[type=password] {
     font-weight: 400;
     font-size: 1.125rem;
     padding-left: 20px;
-    width: 375px; /* corrected typo: '375x' to '375px' */
+    width: 375px;
     height: 50px;
-    border: 1px solid #9da3a7; /* Set the border color and width */
+    border: 1px solid #9da3a7;
     outline: none;
     border-radius: 5px;
     background-color: white;
-    /* background-image: url('home-assets/search.svg');
-    background-position: 10px;
-    background-repeat: no-repeat; */
 }
 
 .smallspace {
@@ -82,4 +80,12 @@ p {
     font-size: 1.125rem;
     color: #9da3a7;
     text-align: center;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+    .left, .right {
+        float: none;
+        width: 100%;
+    }
 }
