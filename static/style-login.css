@@ -1,6 +1,7 @@
 /* Standard styling */
 body {
     margin: 0;
+    display: flex;
 }
 
 .left {
@@ -11,6 +12,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 }
 
 .right {
@@ -21,6 +23,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 }
 
 .logintitle {
