@@ -175,11 +175,13 @@ def signup():
 
 def load_user_info():
     user_info = {}
-    with open("users.csv", "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            username, password_hash = line.strip().split(',')
-            user_info[username] = {'username': username, 'password': password_hash}
+    csv_path = "/mnt/render-disk/users.csv"
+    if os.path.exists(csv_path):
+        with open(csv_path, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                username, password_hash = line.strip().split(',')
+                user_info[username] = {'username': username, 'password': password_hash}
     return user_info
 
 @app.route('/logout')
