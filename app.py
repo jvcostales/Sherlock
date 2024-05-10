@@ -56,7 +56,6 @@ def dashboard():
             values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page=1)
         else:
             total_income = 0  # Set total income to 0 if no spreadsheet info found
-            total_amount = 0
         
         if total_income and total_amount != 0:    
             total_combined = total_income + total_amount
