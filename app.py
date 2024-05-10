@@ -151,23 +151,23 @@ def signup():
         else:
             users[username] = {'username': username, 'password': generate_password_hash(password)}
             
-            # Append user information to the CSV file
-            with open("users.csv", "a") as f:
+            # Append user information to the CSV file if it doesn't exist
+            csv_path = os.path.join(RENDER_DISK_PATH, "users.csv")
+            if not os.path.exists(csv_path):
+                with open(csv_path, "w") as f:
+                    f.write("Username,Password\n")
+            # Write user information
+            with open(csv_path, "a") as f:
                 f.write(f"{username},{generate_password_hash(password)}\n")
             
             # Create a unique CSV file for the user
             user_csv_filename = f"{username}_expenses.csv"
             user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
-            with open(user_csv_path, "w") as f:
-                # Write header to the CSV file
-                f.write("Material,Quantity,Price,Total,Date,Random_ID\n")
+            if not os.path.exists(user_csv_path):
+                with open(user_csv_path, "w") as f:
+                    # Write header to the CSV file
+                    f.write("Material,Quantity,Price,Total,Date,Random_ID\n")
             
-            """ user_info_filename = f"{username}_spreadsheet.csv"
-            user_info_path = os.path.join("Expenses", user_info_filename)
-            with open(user_info_path, "w") as f:
-                # Write header to the spreadsheet CSV file
-                f.write("Spreadsheet_ID,Range_Name\n") """
-
             # Redirect to login page after successful signup
             return redirect(url_for('login'))
     # If GET request, render the signup page
