@@ -199,16 +199,6 @@ body {
     position: relative;
     display: inline-block;
   }
-
-  .userdropdown {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    width: 200px;
-    z-index: 1;
-  }
-
-  
   
   .dropdown-content {
     display: none;
