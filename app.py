@@ -57,13 +57,17 @@ def dashboard():
         else:
             total_income = 0  # Set total income to 0 if no spreadsheet info found
         
-        if total_income and total_amount != 0:    
+        if total_income != 0 or total_amount != 0:    
             total_combined = total_income + total_amount
-            total_income_percentage = round((total_income / total_combined) * 100)
-            total_amount_percentage = round((total_amount / total_combined) * 100)
+            if total_combined != 0:
+                total_income_percentage = round((total_income / total_combined) * 100)
+                total_amount_percentage = round((total_amount / total_combined) * 100)
+            else:
+                total_income_percentage = 0
+                total_amount_percentage = 0
         else:
             total_income_percentage = 0
-            total_amount_percentage = 0     
+            total_amount_percentage = 0 
         
         return render_template('index-dashboard.html', total_income=total_income, total_amount=total_amount, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
     else:
