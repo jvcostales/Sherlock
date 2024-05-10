@@ -155,6 +155,10 @@
                 </div>
             </div>
         </div>
+        <form action="{{ url_for('upload_profile_photo') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="file">
+            <input type="submit" value="Upload Photo">
+        </form>
     </div>
     <script>
         function redirectToIncome() {

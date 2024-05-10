@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import uuid
 import re
@@ -31,6 +32,7 @@ app.secret_key = 'yZJPf2C6URJUvybJcZJwYb4rjwcJ6zwC'  # Set a secret key for sess
 login_manager = LoginManager()
 login_manager.init_app(app)
 RENDER_DISK_PATH = '/mnt/render-disk'
+UPLOAD_CSV = '/mnt/render-risk/uploaded_files.csv'
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
@@ -85,7 +87,9 @@ users = {
 
 # User class for Flask-Login
 class User(UserMixin):
-    pass
+    def __init__(self, id, profile_photo=None):
+        self.id = id
+        self.profile_photo = profile_photo
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -93,7 +97,40 @@ def load_user(user_id):
     user.id = user_id
     return user
 
-from flask import render_template
+def save_to_csv(filename):
+    with open(UPLOAD_CSV, mode='a') as file:
+        file.write(f"{current_user.id},{filename}\n")
+
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        
+@app.route('/upload_profile_photo', methods=['POST'])
+@login_required
+def upload_profile_photo():
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_CSV'], filename))
+        save_to_csv(filename)
+        # Update user's profile with the filename or path of the uploaded photo
+        current_user.profile_photo = filename
+        # Optionally, you may want to save the filename or path in the database
+        # user_id = current_user.id
+        # save_filename_to_database(user_id, filename)
+        return redirect(url_for('user_profile'))
+    else:
+        flash('Invalid file type')
+        return redirect(request.url)
 
 @app.route('/expenses')
 def expenses():
