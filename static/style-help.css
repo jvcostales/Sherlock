@@ -187,3 +187,7 @@ body {
 li {
     margin-bottom: 0.5rem;
 }
+
+.highlight {
+    background-color: yellow;
+}

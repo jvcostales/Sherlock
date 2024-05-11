@@ -460,3 +460,7 @@ td {
   height: 5px;
   background-color:#EFF2FB;
 }
+
+.highlight {
+  background-color: yellow;
+}

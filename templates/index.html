@@ -24,38 +24,38 @@
                 <li><a onclick="redirectToDashboard()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">space_dashboard</span>
-                            <div class="text">Dashboard</div>
+                            <div class="text searchword">Dashboard</div>
                         </div>
                     </a></li>
                 <li><a onclick="redirectToIncome()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">local_mall</span>
-                            <div class="text">Income</div>
+                            <div class="text searchword">Income</div>
                         </div>
                     </a></li>
                 <li><a onclick="redirectToExpenses()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">account_balance_wallet</span>
-                            <div class="text">Expenses</div>
+                            <div class="text searchword">Expenses</div>
                         </div>
                     </a></li>
                 <li><a onclick="redirectToHelp()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">help</span>
-                            <div class="text">Help</div>
+                            <div class="text searchword">Help</div>
                         </div>
                     </a></li>
                 <li><a href="{{ url_for('logout') }}">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">logout</span>
-                            <div class="text">Log Out</div>
+                            <div class="text searchword">Log Out</div>
                         </div>
                     </a></li>
             </ul>
         </div>
         <div class="mainarea">
             <div class="topbar">
-                <div class="header">Expenses</div>
+                <div class="header searchword">Expenses</div>
                 <div class="searchuser">
                     <form>
                         <input class="search" type="text" id="searchInput" placeholder="Search" oninput="findWord()">
@@ -68,17 +68,17 @@
             </div>
             <div class="mid">
                 <div class="total">
-                    <div class="number">
+                    <div class="number searchword">
                         &#8369;{{ total_amount }}
                     </div>
-                    <div class="label">
+                    <div class="label searchword">
                         Total
                     </div>
                 </div>
                 <div class="buttons">
                     <form id="filterForm" action="{{ url_for('expenses') }}" method="get">
                         <div class="dropdown">
-                            <div class="filter dropbtn">Filters</div>
+                            <div class="filter dropbtn searchword">Filters</div>
                             <div class="dropdown-content">
                                 <div class="space"></div>
                                 <button type="submit" name="last_7_days" value="true">Last 7 Days</button>
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                     </form>
-                    <button class="add" onclick="togglePopup()">
+                    <button class="add searchword" onclick="togglePopup()">
                         Add Expense
                     </button>
                 </div>
@@ -99,23 +99,23 @@
                 </form>
                 <thead>
                     <tr>
-                        <th>Material</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Date</th>
-                        <th>Action</th>
+                        <th class="searchword">Material</th>
+                        <th class="searchword">Quantity</th>
+                        <th class="searchword">Price</th>
+                        <th class="searchword">Total</th>
+                        <th class="searchword">Date</th>
+                        <th class="searchword">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for expense in expenses %}
                     <tr>
-                        <td>{{ expense.material }}</td>
-                        <td>{{ expense.quantity }}</td>
-                        <td>&#8369;{{ expense.price }}</td>
-                        <td>&#8369;{{ expense.total }}</td>
-                        <td>{{ expense.date.strftime('%Y-%m-%d') }}</td>
-                        <td><button class="delete" type="button"
+                        <td class="searchword">{{ expense.material }}</td>
+                        <td class="searchword">{{ expense.quantity }}</td>
+                        <td class="searchword">&#8369;{{ expense.price }}</td>
+                        <td class="searchword">&#8369;{{ expense.total }}</td>
+                        <td class="searchword">{{ expense.date.strftime('%Y-%m-%d') }}</td>
+                        <td class="searchword"><button class="delete" type="button"
                                 onclick="confirmDelete('{{ expense.random_id }}')"><span
                                     class="material-symbols-outlined">
                                     delete
@@ -127,11 +127,11 @@
             <div class="pagination">
                 {% if page > 1 %}
                 {% if last_7_days %}
-                <button class="prev" onclick="goToPage({{ page - 1 }}, true, false)">Prev</button>
+                <button class="prev searchword" onclick="goToPage({{ page - 1 }}, true, false)">Prev</button>
                 {% elif last_28_days %}
-                <button class="prev" onclick="goToPage({{ page - 1 }}, false, true)">Prev</button>
+                <button class="prev searchword" onclick="goToPage({{ page - 1 }}, false, true)">Prev</button>
                 {% else %}
-                <button class="prev" onclick="goToPage({{ page - 1 }}, false, false)">Prev</button>
+                <button class="prev searchword" onclick="goToPage({{ page - 1 }}, false, false)">Prev</button>
                 {% endif %}
                 {% endif %}
                 <div class="numbering">
@@ -140,18 +140,18 @@
                     <div class="numberlabel2">{{ page + 1 }}</div>
                 </div>
                 {% if page >= 1 and expenses_loaded == 8 %}
-                {% if last_7_days %} 
-                <button class="next" onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
+                {% if last_7_days %}
+                <button class="next searchword" onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
                 {% elif last_28_days %}
-                <button class="next" onclick="goToPage({{ page + 1 }}, false, true)">Next</button>
+                <button class="next searchword" onclick="goToPage({{ page + 1 }}, false, true)">Next</button>
                 {% else %}
-                <button class="next" onclick="goToPage({{ page + 1 }}, false, false)">Next</button>
+                <button class="next searchword" onclick="goToPage({{ page + 1 }}, false, false)">Next</button>
                 {% endif %}
                 {% endif %}
             </div>
             {% else %}
             <div class="no-expense">
-                <p>Nothing to show here.</p>
+                <p class="searchword">Nothing to show here.</p>
             </div>
             {% endif %}
         </div>
@@ -283,6 +283,33 @@
     }
     function redirectToHelp() {
         window.location.href = "/help";
+    }
+
+
+
+    function highlightText(element, searchText) {
+        var content = element.textContent || element.innerText;
+        var caseInsensitiveText = searchText.toLowerCase();
+
+        if (content.toLowerCase().includes(caseInsensitiveText)) {
+            var regex = new RegExp('(' + escapeRegExp(caseInsensitiveText) + ')', 'gi');
+            content = content.replace(regex, '<span class="highlight">$1</span>');
+            element.innerHTML = content;
+        }
+    }
+
+    function findWord() {
+        var searchText = document.getElementById('searchInput').value;
+        var texts = document.querySelectorAll('.searchword');
+
+        texts.forEach(function (element) {
+            element.innerHTML = element.textContent || element.innerText;
+            highlightText(element, searchText);
+        });
+    }
+
+    function escapeRegExp(text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     }
 </script>
 </body>

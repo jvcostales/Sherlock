@@ -425,3 +425,7 @@ h3 {
     height: 3rem;
 }
 }
+
+.highlight {
+    background-color: yellow;
+}

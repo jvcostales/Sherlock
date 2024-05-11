@@ -24,31 +24,31 @@
                 <li><a onclick="redirectToDashboard()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">space_dashboard</span>
-                            <div class="text">Dashboard</div>
+                            <div class="text searchword">Dashboard</div>
                         </div>
                     </a></li>
                 <li><a onclick="redirectToIncome()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">local_mall</span>
-                            <div class="text">Income</div>
+                            <div class="text searchword">Income</div>
                         </div>
                     </a></li>
                 <li><a onclick="redirectToExpenses()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">account_balance_wallet</span>
-                            <div class="text">Expenses</div>
+                            <div class="text searchword">Expenses</div>
                         </div>
                     </a></li>
                 <li><a onclick="redirectToHelp()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">help</span>
-                            <div class="text">Help</div>
+                            <div class="text searchword">Help</div>
                         </div>
                     </a></li>
                 <li><a href="{{ url_for('logout') }}">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">logout</span>
-                            <div class="text">Log Out</div>
+                            <div class="text searchword">Log Out</div>
                         </div>
                     </a></li>
             </ul>
@@ -67,70 +67,113 @@
                 </div>
             </div>
             <div class="type">
-                <div class="one">Sherlock Guide</div>
+                <div class="one searchword">Sherlock Guide</div>
                 <div class="space"></div>
-                <div class="two">Sherlock uses Google Forms and Google Sheets to display data. Below are the steps to maximize your use.</div>
+                <div class="two searchword">Sherlock uses Google Forms and Google Sheets to display data. Below are the steps to
+                    maximize your use.</div>
                 <div class="space"></div>
-                <div class="three">Sign up and login</div>
+                <div class="three searchword">Sign up and login</div>
                 <div class="smallspace"></div>
-                <div class="two">
+                <div class="two searchword">
                     <ol>
-                        <li>If you don’t have an account yet, sign up using a strong combination of characters for your username and password.</li>
+                        <li>If you don’t have an account yet, sign up using a strong combination of characters for your
+                            username and password.</li>
                         <li>Login using the sign-up credentials you entered previously.</li>
                     </ol>
                 </div>
                 <div class="space"></div>
-                <div class="three">Set up your Google Forms and Google Sheets</div>
+                <div class="three searchword">Set up your Google Forms and Google Sheets</div>
                 <div class="smallspace"></div>
-                <div class="two">
+                <div class="two searchword">
                     <ol>
                         <li>Set up your Google Forms <a href="http://forms.google.com">here</a>.</li>
-                        <li>Ensure that your form consists of the following (in order): Name, Address, Item, Amount, Date, Proof of Payment.</li>
-                        <li>If you have any other details needed from your customers, you can put them after the required details.</li>
+                        <li>Ensure that your form consists of the following (in order): Name, Address, Item, Amount,
+                            Date, Proof of Payment.</li>
+                        <li>If you have any other details needed from your customers, you can put them after the
+                            required details.</li>
                         <li>In the responses tab, click the “Link to Sheets” button and confirm.</li>
                     </ol>
                 </div>
                 <div class="space"></div>
-                <div class="three">Set up your income page</div>
+                <div class="three searchword">Set up your income page</div>
                 <div class="smallspace"></div>
-                <div class="two">
+                <div class="two searchword">
                     <ol>
-                        <li>On the income page, click the “Select Sheets” button and enter your sheet&#39;s spreadsheet ID and range name.</li>
-                        <li>The spreadsheet ID is the last string of characters in the URL for your spreadsheet. For example, in this <a href="https://docs.google.com/spreadsheets/d/1WP_X46C7ylMbwD7WLOlx0EgUADf50UdMRIDCfiT9yNg/edit?usp=sharing">sample spreadsheet</a>, the spreadsheet ID is 1WP_X46C7ylMbwD7WLOlx0EgUADf50UdMRIDCfiT9yNg.</li>
-                        <li>The range name is a syntax that contains the sheet name plus the starting and ending cell coordinates. For example, Sheet1!A:B refers to the first two columns of Sheet1.</li>
-                        <li>For more information, please visit <a href="https://developers.google.com/sheets/api/guides/concepts">Google Sheets API Overview</a>.</li>
-                        <li>You can select a filter option on how you want to view your income database. This can be for the last 7 days, 28 days, or lifetime.</li>
+                        <li>On the income page, click the “Select Sheets” button and enter your sheet&#39;s spreadsheet
+                            ID and range name.</li>
+                        <li>The spreadsheet ID is the last string of characters in the URL for your spreadsheet. For
+                            example, in this <a
+                                href="https://docs.google.com/spreadsheets/d/1WP_X46C7ylMbwD7WLOlx0EgUADf50UdMRIDCfiT9yNg/edit?usp=sharing">sample
+                                spreadsheet</a>, the spreadsheet ID is 1WP_X46C7ylMbwD7WLOlx0EgUADf50UdMRIDCfiT9yNg.
+                        </li>
+                        <li>The range name is a syntax that contains the sheet name plus the starting and ending cell
+                            coordinates. For example, Sheet1!A:B refers to the first two columns of Sheet1.</li>
+                        <li>For more information, please visit <a
+                                href="https://developers.google.com/sheets/api/guides/concepts">Google Sheets API
+                                Overview</a>.</li>
+                        <li>You can select a filter option on how you want to view your income database. This can be for
+                            the last 7 days, 28 days, or lifetime.</li>
                     </ol>
                 </div>
                 <div class="space"></div>
-                <div class="three">Set up your expenses page</div>
+                <div class="three searchword">Set up your expenses page</div>
                 <div class="smallspace"></div>
-                <div class="two">
+                <div class="two searchword">
                     <ol>
-                        <li>On the expenses page, click the “Add Expense” button and enter the necessary information: material, quantity, price, and date of expense.</li>
-                        <li>Ensure that all fields are duly filled out, as the system will show an error when invalid entries are entered.</li>
-                        <li>Clicking the “Submit” button will reflect the expense information on the page. In case of any mistake, you can use the delete button.</li>
-                        <li>You can select a filter option on how you want to view your expenses database. This can be for the last 7 days, 28 days, or lifetime.</li>
+                        <li>On the expenses page, click the “Add Expense” button and enter the necessary information:
+                            material, quantity, price, and date of expense.</li>
+                        <li>Ensure that all fields are duly filled out, as the system will show an error when invalid
+                            entries are entered.</li>
+                        <li>Clicking the “Submit” button will reflect the expense information on the page. In case of
+                            any mistake, you can use the delete button.</li>
+                        <li>You can select a filter option on how you want to view your expenses database. This can be
+                            for the last 7 days, 28 days, or lifetime.</li>
                     </ol>
-            </div>
+                </div>
 
 
 
 
-            <script>
-                function redirectToIncome() {
-                    window.location.href = "/income";
-                }
-                function redirectToExpenses() {
-                    window.location.href = "/expenses";
-                }
-                function redirectToHelp() {
-                    window.location.href = "/help";
-                }
-            </script>
-            <script>
-                function redirectToDashboard() {
-                    window.location.href = "/dashboard";
-                }
-            </script>
+                <script>
+                    function highlightText(element, searchText) {
+                        var content = element.textContent || element.innerText;
+                        var caseInsensitiveText = searchText.toLowerCase();
+
+                        if (content.toLowerCase().includes(caseInsensitiveText)) {
+                            var regex = new RegExp('(' + escapeRegExp(caseInsensitiveText) + ')', 'gi');
+                            content = content.replace(regex, '<span class="highlight">$1</span>');
+                            element.innerHTML = content;
+                        }
+                    }
+
+                    function findWord() {
+                        var searchText = document.getElementById('searchInput').value;
+                        var texts = document.querySelectorAll('.searchword');
+
+                        texts.forEach(function (element) {
+                            element.innerHTML = element.textContent || element.innerText;
+                            highlightText(element, searchText);
+                        });
+                    }
+
+                    function escapeRegExp(text) {
+                        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                    }
+
+
+                    function redirectToIncome() {
+                        window.location.href = "/income";
+                    }
+                    function redirectToExpenses() {
+                        window.location.href = "/expenses";
+                    }
+                    function redirectToHelp() {
+                        window.location.href = "/help";
+                    }
+                </script>
+                <script>
+                    function redirectToDashboard() {
+                        window.location.href = "/dashboard";
+                    }
+                </script>
 </body>
