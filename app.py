@@ -243,7 +243,7 @@ def load_expenses(page):
     end_index = start_index + expenses_per_page
     username = current_user.id
     user_csv_filename = f"{username}_expenses.csv"
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
     
     expenses = []
     total_expenses = 0
@@ -268,7 +268,7 @@ def load_expenses(page):
 def load_expenses_last_7_days(page):
     username = current_user.id
     user_csv_filename = f"{username}_expenses.csv"
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
     
     expenses_per_page = 8
     start_index = (page - 1) * expenses_per_page
@@ -301,7 +301,7 @@ def load_expenses_last_7_days(page):
 def load_expenses_last_28_days(page):
     username = current_user.id
     user_csv_filename = f"{username}_expenses.csv"
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
     
     expenses_per_page = 8
     start_index = (page - 1) * expenses_per_page
@@ -420,7 +420,7 @@ def income():
         # Fetch all data
         values, rows_loaded, total_income, income = get_sheet_data(spreadsheet_id, range_name, page)
     
-    return render_template("index-income.html", values=values, income=income, total_income=total_income, rows_loaded=rows_loaded, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
+    return render_template("index-income.html", values=values, rows_loaded=rows_loaded, income=income, total_income=total_income, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 def get_sheet_data(spreadsheet_id, range_name, page):
     creds = None
