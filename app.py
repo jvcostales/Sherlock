@@ -49,7 +49,7 @@ def dashboard():
         username = current_user.id
         spreadsheet_id, range_name = get_spreadsheet_info(username)
         page = request.args.get('page', 1, type=int)
-        expenses, total_expenses, total_amount = load_expenses(page)
+        expenses, total_expenses, total_amount, _ = load_expenses(page)
 
         # Fetch total income from Google Sheets API
         if spreadsheet_id and range_name:
