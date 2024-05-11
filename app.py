@@ -144,41 +144,46 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    # If the request method is POST, process the form data
     if request.method == 'POST':
+        # Get username and password from the form
         username = request.form['username']
         password = request.form['password']
-        
-        # Validate username and password length
+
+        # Check username and password length
         if not (6 <= len(username) <= 20):
             return 'Username must be 6 to 20 characters long!'
         if not (6 <= len(password) <= 20):
             return 'Password must be 6 to 20 characters long!'
         
+        # Check if username already exists
         if username in users:
             return 'Username already exists!'
         else:
+            # Add new user to the users dictionary with hashed password
             users[username] = {'username': username, 'password': generate_password_hash(password)}
             
-            # Append user information to the CSV file if it doesn't exist
+            # Create users.csv if it doesn't exist and write header
             csv_path = os.path.join(RENDER_DISK_PATH, "users.csv")
             if not os.path.exists(csv_path):
                 with open(csv_path, "w") as f:
                     f.write("Username,Password\n")
-            # Write user information
+
+            # Append new user to users.csv
             with open(csv_path, "a") as f:
                 f.write(f"{username},{generate_password_hash(password)}\n")
             
-            # Create a unique CSV file for the user
+            # Create user's expenses CSV file if it doesn't exist and write header
             user_csv_filename = f"{username}_expenses.csv"
             user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
             if not os.path.exists(user_csv_path):
                 with open(user_csv_path, "w") as f:
-                    # Write header to the CSV file
                     f.write("Material,Quantity,Price,Total,Date,Random_ID\n")
             
-            # Redirect to login page after successful signup
+            # Redirect user to login page after successful signup
             return redirect(url_for('login'))
-    # If GET request, render the signup page
+    
+    # If request method is GET, render the signup.html template
     return render_template('signup.html')
 
 def load_user_info():

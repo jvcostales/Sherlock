@@ -1,4 +1,3 @@
-
 body {
     width: 100vw;
     height: 100vh;
@@ -89,14 +88,15 @@ body {
 
 @media screen and (max-width:1200px) {
     .container {
-      width: 100%;
-      grid-template-columns: 7.5rem auto;
+        width: 100%;
+        grid-template-columns: 7.5rem auto;
     }
-  
-    .text, .sidebar-heading {
-      display: none;
+
+    .text,
+    .sidebar-heading {
+        display: none;
     }
-  }
+}
 
 .mainarea {
     background-color: #EFF2FB;
@@ -193,6 +193,7 @@ body {
 .incomebox {
     width: 50%;
 }
+
 .expensesbox {
     width: 50%;
 }
@@ -261,12 +262,14 @@ body {
     text-align: right;
 }
 
-.incomepercent, .expensespercent {
+.incomepercent,
+.expensespercent {
     font-size: 1.75rem;
     font-weight: 400;
 }
 
-.incomelabel, .expenseslabel {
+.incomelabel,
+.expenseslabel {
     color: #ccc;
     font-family: 'Outfit', sans-serif;
     font-size: 1.125rem;
@@ -407,23 +410,23 @@ h3 {
 }
 
 @media screen and (max-width: 768px) {
-.totalboxes {
-    display: flex;
-    flex-direction: column;
-}
+    .totalboxes {
+        display: flex;
+        flex-direction: column;
+    }
 
-.bottom {
-    display: flex;
-    flex-direction: column;
-}
+    .bottom {
+        display: flex;
+        flex-direction: column;
+    }
 
-.calendar {
-    margin-left: 0;
-}
+    .calendar {
+        margin-left: 0;
+    }
 
-.specialspace {
-    height: 3rem;
-}
+    .specialspace {
+        height: 3rem;
+    }
 }
 
 .highlight {
@@ -435,64 +438,43 @@ h3 {
     display: none;
     position: absolute;
     background-color: #fff;
-    min-width: 200px; /* Adjust the width as needed */
+    min-width: 200px;
+    /* Adjust the width as needed */
     z-index: 1;
     right: 0;
     text-align: left;
-  }
-  
-  .dropdown:hover .userdropdown {display: block;}
-  
-  .space1 {
+}
+
+.dropdown:hover .userdropdown {
+    display: block;
+}
+
+.space1 {
     width: 200px;
     height: 5px;
     background-image: url(static/background.png);
     background-repeat: no-repeat;
-  }
-  
-  .usernamedisplay {
+}
+
+.usernamedisplay {
     font-size: 1.5rem;
     color: #3C464E;
     font-weight: 500;
     font-family: 'Outfit', sans-serif;
     margin-left: 30px;
     margin-top: 20px;
-  }
-  
-  .businessowner {
+}
+
+.businessowner {
     font-size: 1rem;
     color: #d9d9d9;
     font-weight: 500;
     font-family: 'Outfit', sans-serif;
     margin-left: 30px;
-  }
-  
-  .logouttext {
-    font-size: 1.25rem;
-    color: #3C464E;
-    font-weight: 500;
-    font-family: 'Outfit', sans-serif;
-  }
-  
-  .userlogout {
-    display: flex;
-    align-items: center;
-    color: #3C464E;
-    margin-left: 30px;
-    margin-bottom: 20px;
-  }
-  
-  .line {
-    width: 160px;
-    height: 1px;
-    background-color: #d9d9d9;
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .user {
+}
+
+.user {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
+}

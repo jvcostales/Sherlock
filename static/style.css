@@ -501,30 +501,6 @@ td {
   margin-left: 30px;
 }
 
-.logouttext {
-  font-size: 1.25rem;
-  color: #3C464E;
-  font-weight: 500;
-  font-family: 'Outfit', sans-serif;
-}
-
-.userlogout {
-  display: flex;
-  align-items: center;
-  color: #3C464E;
-  margin-left: 30px;
-  margin-bottom: 20px;
-}
-
-.line {
-  width: 160px;
-  height: 1px;
-  background-color: #d9d9d9;
-  margin-left: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 .user {
   display: flex;
   align-items: center;
