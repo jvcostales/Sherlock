@@ -11,7 +11,6 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from functools import lru_cache
 
 class Expense:
     def __init__(self, material, quantity, price, total, date, random_id=None, spreadsheet_id=None, range_name=None):
@@ -456,7 +455,6 @@ def income():
     return render_template("index-income.html", values=values, rows_loaded=rows_loaded, income=income, total_income=total_income, total_income_all_pages=total_income_all_pages, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 
-@lru_cache(maxsize=None)
 def get_sheet_data(spreadsheet_id, range_name, page):
     # Check if token.json exists and load credentials
     creds = None
