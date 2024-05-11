@@ -60,10 +60,26 @@
                     <form>
                         <input class="search" type="text" id="searchInput" placeholder="Search" oninput="findWord()">
                     </form>
-                    <img src="..\static\user-image.png" class="user-image">
-                    <span class="material-symbols-outlined expand">
-                        expand_more
-                    </span>
+                    <div class="dropdown">
+                        <div class="user dropbtn">
+                            <img src="..\static\user-image.png" class="user-image">
+                            <span class="material-symbols-outlined expand dropbtn">
+                                expand_more
+                            </span>
+                        </div>
+                        <div class="userdropdown">
+                            <div class="space1"></div>
+                            <div class="usernamedisplay">{{ username }}</div>
+                            <div class="businessowner">Business Owner</div>
+                            <div class="line"></div>
+                            <div href="{{ url_for('logout') }}">
+                                <div class="userlogout">
+                                    <span class="material-symbols-outlined">logout</span>
+                                    <div class="logouttext">Log Out</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="hello">

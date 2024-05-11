@@ -105,6 +105,7 @@ from flask import render_template
 @app.route('/expenses')
 def expenses():
     if current_user.is_authenticated:
+        username = current_user.id
         page = request.args.get('page', 1, type=int)
         last_7_days = request.args.get('last_7_days', False, type=bool)
         last_28_days = request.args.get('last_28_days', False, type=bool)
@@ -119,7 +120,7 @@ def expenses():
             expenses, total_expenses, total_amount, expenses_loaded = load_expenses(page)
             total_amount_all_pages = compute_total_amount_all_pages(load_expenses, total_expenses)
         
-        return render_template('index.html', expenses=expenses, page=page, total_expenses=total_expenses, total_amount=total_amount_all_pages, expenses_loaded=expenses_loaded, last_7_days=last_7_days, last_28_days=last_28_days)
+        return render_template('index.html', username=username, expenses=expenses, page=page, total_expenses=total_expenses, total_amount=total_amount_all_pages, expenses_loaded=expenses_loaded, last_7_days=last_7_days, last_28_days=last_28_days)
     else:
         return redirect(url_for('login'))
 
@@ -159,8 +160,8 @@ def signup():
             users[username] = {'username': username, 'password': generate_password_hash(password)}
             
             # Append user information to the CSV file if it doesn't exist
-            csv_path = os.path.join("users.csv")
-            if not os.path.exists(RENDER_DISK_PATH, csv_path):
+            csv_path = os.path.join(RENDER_DISK_PATH, "users.csv")
+            if not os.path.exists(csv_path):
                 with open(csv_path, "w") as f:
                     f.write("Username,Password\n")
             # Write user information
@@ -242,31 +243,60 @@ def delete():
         return redirect('/expenses')
     
 def load_expenses(page):
-    expenses_per_page = 8
+    # Define constants
+    expenses_per_page = 8  # Number of expenses to display per page
+
+    # Calculate start and end indices of expenses for the given page
     start_index = (page - 1) * expenses_per_page
     end_index = start_index + expenses_per_page
-    username = current_user.id
+
+    # Get the username of the current user
+    username = current_user.id  # Assuming `current_user` is defined elsewhere
+
+    # Construct the filename for the user's expenses CSV file
     user_csv_filename = f"{username}_expenses.csv"
+
+    # Construct the full path to the user's expenses CSV file
     user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
-    
-    expenses = []
-    total_expenses = 0
-    total_amount = 0
-    expenses_loaded = 0
-    
+
+    # Initialize variables to store expenses data
+    expenses = []  # List to hold Expense objects
+    total_expenses = 0  # Total number of expenses in the CSV file
+    total_amount = 0  # Total amount spent on expenses
+    expenses_loaded = 0  # Number of expenses loaded for the current page
+
+    # Check if the user's CSV file exists
     if os.path.exists(user_csv_path):
+        # If the file exists, open it for reading
         with open(user_csv_path, "r") as f:
+            # Read all lines from the file, skipping the header
             lines = f.readlines()[1:]  # Skip header
+
+            # Count total number of expenses in the CSV file
             total_expenses = len(lines)
+
+            # Iterate over lines in the file corresponding to the current page's expenses
             for line in lines[start_index:end_index]:
+                # Split each line into its components
                 parts = line.strip().split(',')
+
+                # Extract individual components from the split line
                 material, quantity, price, total, date_str, ran = parts
-                date = datetime.strptime(date_str, '%Y-%m-%d')  # Convert date string to datetime object
+
+                # Convert date string to a datetime object
+                date = datetime.strptime(date_str, '%Y-%m-%d')
+
+                # Update total amount spent on expenses
                 total_amount += float(total)
+
+                # Create an Expense object and add it to the expenses list
                 expenses.append(Expense(material=material, quantity=int(quantity), price=float(price),
                                         total=float(total), date=date, random_id=ran))
+
+                # Increment the count of expenses loaded
                 expenses_loaded += 1
-        
+    
+    # Return the loaded expenses, total number of expenses, total amount spent, and number of expenses loaded
     return expenses, total_expenses, total_amount, expenses_loaded
 
 def load_expenses_last_7_days(page):
@@ -424,14 +454,17 @@ def income():
 
     total_income_all_pages = get_total_income_of_all_pages(spreadsheet_id, range_name)
 
-    return render_template("index-income.html", values=values, rows_loaded=rows_loaded, income=income, total_income=total_income, total_income_all_pages=total_income_all_pages, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
+    return render_template("index-income.html", username=username, values=values, rows_loaded=rows_loaded, income=income, total_income=total_income, total_income_all_pages=total_income_all_pages, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 
 @lru_cache(maxsize=None)
 def get_sheet_data(spreadsheet_id, range_name, page):
+    # Check if token.json exists and load credentials
     creds = None
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        
+    # If credentials are missing or invalid, obtain new credentials
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -440,14 +473,18 @@ def get_sheet_data(spreadsheet_id, range_name, page):
                 "credentials.json", SCOPES
             )
             creds = flow.run_local_server(port=0)
+        # Save updated credentials to token.json
         with open("token.json", "w") as token:
             token.write(creds.to_json())
 
+    # Build Google Sheets API service
     service = build("sheets", "v4", credentials=creds)
 
+    # Calculate start and end indices for pagination
     start_index = (page - 1) * 8 + 1
     end_index = start_index + 8
 
+    # Access the spreadsheet and retrieve data from the specified range
     sheet = service.spreadsheets()
     result = (
         sheet.values()
@@ -456,23 +493,30 @@ def get_sheet_data(spreadsheet_id, range_name, page):
     )
     values = result.get("values", [])
 
+    # Initialize variables for paginated values and rows loaded
     paginated_values = []
-    rows_loaded = 0  # Initialize rows_loaded variable to track the number of rows loaded
+    rows_loaded = 0
 
+    # If values exist, paginate and load rows
     if values:
-        paginated_values.append(values[0])  # Include the header row
+        paginated_values.append(values[0])  # Append header row
         for row_index in range(start_index, min(end_index, len(values))):
-            paginated_values.append(values[row_index])
-            rows_loaded += 1  # Increment rows_loaded for each row processed
+            paginated_values.append(values[row_index])  # Append rows
+            rows_loaded += 1
             
+    # Calculate total income from paginated values
     total_income = 0
     if paginated_values:
-        for row in paginated_values[1:]:  # Exclude the header row
+        for row in paginated_values[1:]:
             try:
-                total_income += float(row[4])  # Assuming amount is in the 5th column
+                total_income += float(row[4])  # Assuming income is in the 5th column (index 4)
             except (ValueError, IndexError):
                 pass
+    
+    # Print number of rows loaded for debugging purposes
     print(rows_loaded)
+    
+    # Return paginated values, rows loaded, total income, and income (undefined in your original code)
     return paginated_values, rows_loaded, total_income, income
 
 def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
