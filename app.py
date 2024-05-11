@@ -384,7 +384,6 @@ def income():
     last_7_days = request.args.get('last_7_days', False, type=bool)
     last_28_days = request.args.get('last_28_days', False, type=bool)
 
-
     saved_spreadsheet_id, saved_range_name = get_spreadsheet_info(username)
 
     if not spreadsheet_id and not range_name:
@@ -411,8 +410,11 @@ def income():
 
     else:
         # Fetch all data
-        values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page)
-    
+        if spreadsheet_id and range_name:
+            values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page)
+        else:
+            total_income = 0
+        
     return render_template("index-income.html", values=values, income=income, total_income=total_income, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 def get_sheet_data(spreadsheet_id, range_name, page):
