@@ -39,10 +39,10 @@
                             <div class="text">Expenses</div>
                         </div>
                     </a></li>
-                <li><a href="#">
+                <li><a onclick="redirectToHelp()">
                         <div class="icon-text-wrapper">
-                            <span class="material-symbols-outlined">bar_chart</span>
-                            <div class="text">Reports</div>
+                            <span class="material-symbols-outlined">help</span>
+                            <div class="text">Help</div>
                         </div>
                     </a></li>
                 <li><a href="{{ url_for('logout') }}">
@@ -179,6 +179,9 @@
     <script>
         function redirectToDashboard() {
             window.location.href = "/dashboard";
+        }        
+        function redirectToHelp() {
+            window.location.href = "/help";
         }
     </script>
     <script>

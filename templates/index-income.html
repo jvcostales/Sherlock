@@ -27,7 +27,7 @@
                             <div class="text">Dashboard</div>
                         </div>
                     </a></li>
-                <li><a href="#">
+                <li><a onclick="redirectToIncome()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">local_mall</span>
                             <div class="text">Income</div>
@@ -39,10 +39,10 @@
                             <div class="text">Expenses</div>
                         </div>
                     </a></li>
-                <li><a href="#">
+                <li><a onclick="redirectToHelp()">
                         <div class="icon-text-wrapper">
-                            <span class="material-symbols-outlined">bar_chart</span>
-                            <div class="text">Reports</div>
+                            <span class="material-symbols-outlined">help</span>
+                            <div class="text">Help</div>
                         </div>
                     </a></li>
                 <li><a href="{{ url_for('logout') }}">
@@ -160,9 +160,6 @@
     </div>
     <div class="overlay" id="overlay" onclick="togglePopup()"></div>
     <script>
-        function redirectToExpenses() {
-            window.location.href = "/expenses";
-        }
     function goToPage(page, last7days, last28days) {
         if (last7days) {
             window.location.href = "/income?page=" + page + "&last_7_days=true";
@@ -190,7 +187,17 @@
         function redirectToDashboard() {
             window.location.href = "/dashboard";
         }
+        function redirectToIncome() {
+            window.location.href = "/income";
+        }
+        function redirectToExpenses() {
+            window.location.href = "/expenses";
+        }
+        function redirectToHelp() {
+            window.location.href = "/help";
+        }
     </script>
+    
 </body>
 
 </html>

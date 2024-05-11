@@ -9,7 +9,7 @@ body {
     width: 50vw;
     height:100vh;
     background-color: #4C44B1;
-    background-image: linear-gradient(to top right, rgba(7, 165, 187, 0.5),#4C44B1);
+    background-image: linear-gradient(to top right, rgba(7, 165, 187, 0.75),#4C44B1);
     display: flex;
     align-items: center;
     justify-content: center;

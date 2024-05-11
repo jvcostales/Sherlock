@@ -387,7 +387,6 @@ def save_spreadsheet_info(username, spreadsheet_id, range_name):
         f.write(f"{spreadsheet_id},{range_name}\n")
 
 @app.route("/income", methods=['GET'])
-@app.route("/income", methods=['GET'])
 def income():
     username = current_user.id
     spreadsheet_id = request.args.get('spreadsheet_id')
@@ -603,6 +602,10 @@ def get_total_income_of_all_pages(spreadsheet_id, range_name):
         page += 1
 
     return total_income_all_pages
+
+@app.route("/help")
+def help():
+    return render_template('index-help.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

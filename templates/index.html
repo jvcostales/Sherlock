@@ -33,16 +33,16 @@
                             <div class="text">Income</div>
                         </div>
                     </a></li>
-                <li><a href="#">
+                <li><a onclick="redirectToExpenses()">
                         <div class="icon-text-wrapper">
                             <span class="material-symbols-outlined">account_balance_wallet</span>
                             <div class="text">Expenses</div>
                         </div>
                     </a></li>
-                <li><a href="#">
+                <li><a onclick="redirectToHelp()">
                         <div class="icon-text-wrapper">
-                            <span class="material-symbols-outlined">bar_chart</span>
-                            <div class="text">Reports</div>
+                            <span class="material-symbols-outlined">help</span>
+                            <div class="text">Help</div>
                         </div>
                     </a></li>
                 <li><a href="{{ url_for('logout') }}">
@@ -273,10 +273,16 @@
     function redirectToIncome() {
         window.location.href = "/income";
     }
+    function redirectToExpenses() {
+        window.location.href = "/expenses";
+    }
 </script>
 <script>
     function redirectToDashboard() {
         window.location.href = "/dashboard";
+    }
+    function redirectToHelp() {
+        window.location.href = "/help";
     }
 </script>
 </body>
