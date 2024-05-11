@@ -410,6 +410,7 @@ h3 {
 .totalboxes {
     display: flex;
     flex-direction: column;
+    left: 0;
 }
 
 .bottom {
