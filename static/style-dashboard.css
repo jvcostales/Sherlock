@@ -176,35 +176,40 @@ body {
     font-size: 1.125rem;
 }
 
+.bottomleft {
+    width: 100%;
+}
+
 .totalboxes {
     display: flex;
     align-items: center;
-    justify-content: left;
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 2rem;
+    box-sizing: border-box;
 }
 
-.incometitle {
+.incomebox {
+    width: 50%;
+}
+.expensesbox {
+    width: 50%;
+}
+
+
+.bottomlefttitle {
     color: #3C464E;
     font-family: 'Outfit', sans-serif;
     font-size: 1.5rem;
     font-weight: 500;
-    margin-bottom: 20px;
 }
 
-.expensestitle {
-    color: #3C464E;
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin-bottom: 20px;
-    margin-left: 10px;
+.space {
+    height: 1rem;
 }
 
 .total1 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 500px;
-    height: 100px;
     border: none;
     outline: none;
     border-radius: 5px;
@@ -212,62 +217,85 @@ body {
 }
 
 .total2 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 500px;
-    height: 100px;
     border: none;
     outline: none;
     border-radius: 5px;
     background-color: white;
-    margin-left: 10px;
 }
 
 .number {
     color: #3C464E;
     font-family: 'Outfit', sans-serif;
+    font-weight: 400;
     font-size: 1.75rem;
-    margin-left: 30px;
 }
 
 .label {
-    color: #3C464E;
+    color: #ccc;
     font-family: 'Outfit', sans-serif;
     font-size: 1.125rem;
-    margin-right: 30px;
     font-weight: 400;
 }
 
-
-.latesttitle {
-    color: #3C464E;
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-left: 3rem;
-    margin-bottom: 20px;
-    margin-top: 60px;
+.smallspace {
+    height: 0.5rem;
 }
 
-.latest {
+.comparison {
+    background-color: white;
+    border-radius: 5px;
+    width: 100%;
+    color: #3C464E;
+    font-family: 'Outfit', sans-serif;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.percentdatavs {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 1010px;
-    height: 65px;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    background-color: white;
-    margin-left: 3rem;
-    margin-bottom: 10px;
 }
+
+.expensespercentlabel {
+    text-align: right;
+}
+
+.incomepercent, .expensespercent {
+    font-size: 1.75rem;
+    font-weight: 400;
+}
+
+.incomelabel, .expenseslabel {
+    color: #ccc;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+
+.percentbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.incomepercentbar {
+    background-color: #4C44B1;
+    height: 3rem;
+}
+
+.expensespercentbar {
+    background-color: #07A5BB;
+    height: 3rem;
+}
+
 
 .bottom {
     display: flex;
     justify-content: space-between;
     margin-left: 3rem;
+    margin-bottom: 3rem;
+    margin-right: 3rem;
 }
 
 h3 {
@@ -279,7 +307,6 @@ h3 {
 
 .calendar {
     margin-left: 3rem;
-    margin-right: 3rem;
     padding: 1.5rem;
     width: 350px;
     background: #fff;
@@ -379,54 +406,22 @@ h3 {
     color: #ccc;
 }
 
-.comparison {
-    background-color: white;
-    border-radius: 5px;
-    width: 946px;
-    color: #3C464E;
-    font-family: 'Outfit', sans-serif;
-    padding: 2rem;
-    margin-top: 10px;
-}
-
-.percentdatavs {
+@media screen and (max-width: 768px) {
+.totalboxes {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
+    flex-direction: column;
 }
 
-.expensespercentlabel {
-    text-align: right;
-}
-
-.incomepercent, .expensespercent {
-    font-size: 1.75rem;
-    font-weight: 400;
-}
-
-.incomelabel, .expenseslabel {
-    color: #3C464E;
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.125rem;
-    font-weight: 400;
-}
-
-.percentbar {
+.bottom {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
-.incomepercentbar {
-    background-color: #4C44B1;
+.calendar {
+    margin-left: 0;
+}
+
+.specialspace {
     height: 3rem;
-    border-radius: 5px 0px 0px 5px;
 }
-
-.expensespercentbar {
-    background-color: #07A5BB;
-    height: 3rem;
-    border-radius: 0px 5px 5px 0px;
 }
-

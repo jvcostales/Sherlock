@@ -70,67 +70,79 @@
                 <div class="greeting">
                     Hello, {{ username }}!
                 </div>
+                <div class="smallspace"></div>
                 <div class="comment">
                     Let's make this day productive.
                 </div>
             </div>
             <div class="bottom">
                 <div class="bottomleft">
+                    <div class="bottomlefttitle">
+                        Overview
+                    </div>
+                    <div class="space"></div>
                     <div class="totalboxes">
                         <div class="incomebox">
-                            <div class="incometitle">
-                                Income
-                            </div>
                             <div class="total1">
+                                <div class="label">
+                                    Income
+                                </div>
+                                <div class="smallspace"></div>
                                 <div class="number">
                                     &#8369;{{ total_income }}
-                                </div>
-                                <div class="label">
-                                    Total
                                 </div>
                             </div>
                         </div>
                         <div class="expensesbox">
-                            <div class="expensestitle">
-                                Expenses
-                            </div>
                             <div class="total2">
+                                <div class="label">
+                                    Expenses
+                                </div>
+                                <div class="smallspace"></div>
                                 <div class="number">
                                     &#8369;{{ total_amount }}
-                                </div>
-                                <div class="label">
-                                    Total
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="space"></div>
                     <div class="comparison">
                         <div class="percentdatavs">
                             <div class="incomepercentlabel">
                                 <div class="incomepercent">
                                     {{ total_income_percentage }}%
                                 </div>
+                                <div class="smallspace"></div>
                                 <div class="incomelabel">
                                     Income
                                 </div>
+                                <div class="smallspace"></div>
                             </div>
-                            <div class="vs">VS</div>
                             <div class="expensespercentlabel">
                                 <div class="expensespercent">
                                     {{ total_amount_percentage }}%
                                 </div>
+                                <div class="smallspace"></div>
                                 <div class="expenseslabel">
                                     Expenses
                                 </div>
+                                <div class="smallspace"></div>
                             </div>
                         </div>
+                        {% if total_income_percentage > 0 or total_amount_percentage > 0 %}
                         <div class="percentbar">
+                            {% if total_income_percentage > 0 %}
                             <div class="incomepercentbar" style="width: {{ total_income_percentage }}%"></div>
+                            {% endif %}
+                            {% if total_amount_percentage > 0 %}
                             <div class="expensespercentbar" style="width: {{ total_amount_percentage }}%"></div>
+                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="bottomright">
+                    <div class="specialspace"></div>
                     <div class="calendar">
                         <header>
                             <h3></h3>

@@ -73,7 +73,7 @@ def dashboard():
     else:
         return redirect(url_for('login'))
 
-""" EXPENSES SECTION """
+# EXPENSES SECTION
 users = {
     'user1': {
         'username': 'user1',
@@ -355,7 +355,7 @@ def delete_expense(random_id):
                 f.write(line)
 
 
-""" INCOME SECTION """
+# INCOME SECTION
 
 def get_spreadsheet_info(username):
     user_info_filename = f"{username}_spreadsheet.csv"
