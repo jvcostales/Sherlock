@@ -53,7 +53,7 @@ def dashboard():
 
         # Fetch total income from Google Sheets API
         if spreadsheet_id and range_name:
-            values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page=1)
+            values, rows_loaded, total_income, income = get_sheet_data(spreadsheet_id, range_name, page=1)
         else:
             total_income = 0  # Set total income to 0 if no spreadsheet info found
         
@@ -402,8 +402,7 @@ def income():
 
     if not spreadsheet_id or not range_name:
         # Handle the case where user doesn't provide both parameters
-        total_income = 0
-        return render_template("index-income.html", total_income=total_income, page=page, error="Please provide both spreadsheet ID and range name.")
+        return render_template("index-income.html", page=page, error="Please provide both spreadsheet ID and range name.")
 
     # If user provided new spreadsheet info, save it
     if spreadsheet_id != saved_spreadsheet_id or range_name != saved_range_name:
@@ -412,25 +411,21 @@ def income():
     # Fetch data based on user's selection
     if last_7_days:
         # Fetch data for the last 7 days
-        values, income, total_income = get_sheet_data_last_7_days(spreadsheet_id, range_name, page)
+        values, rows_loaded, total_income, income = get_sheet_data_last_7_days(spreadsheet_id, range_name, page)
 
     elif last_28_days:
-        values, income, total_income = get_sheet_data_last_28_days(spreadsheet_id, range_name, page)
+        values, rows_loaded, total_income, income = get_sheet_data_last_28_days(spreadsheet_id, range_name, page)
 
     else:
         # Fetch all data
-        values, income, total_income = get_sheet_data(spreadsheet_id, range_name, page)
+        values, rows_loaded, total_income, income = get_sheet_data(spreadsheet_id, range_name, page)
     
-    return render_template("index-income.html", values=values, income=income, total_income=total_income, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
+    return render_template("index-income.html", values=values, income=income, total_income=total_income, rows_loaded=rows_loaded, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 def get_sheet_data(spreadsheet_id, range_name, page):
     creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -439,17 +434,14 @@ def get_sheet_data(spreadsheet_id, range_name, page):
                 "credentials.json", SCOPES
             )
             creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
 
     service = build("sheets", "v4", credentials=creds)
 
-    # Define the starting and ending row indices for pagination
     start_index = (page - 1) * 8 + 1
     end_index = start_index + 8
 
-    # Call the Sheets API
     sheet = service.spreadsheets()
     result = (
         sheet.values()
@@ -458,12 +450,14 @@ def get_sheet_data(spreadsheet_id, range_name, page):
     )
     values = result.get("values", [])
 
-    # Paginate the data
     paginated_values = []
+    rows_loaded = 0  # Initialize rows_loaded variable to track the number of rows loaded
+
     if values:
         paginated_values.append(values[0])  # Include the header row
         for row_index in range(start_index, min(end_index, len(values))):
             paginated_values.append(values[row_index])
+            rows_loaded += 1  # Increment rows_loaded for each row processed
             
     total_income = 0
     if paginated_values:
@@ -472,17 +466,13 @@ def get_sheet_data(spreadsheet_id, range_name, page):
                 total_income += float(row[4])  # Assuming amount is in the 5th column
             except (ValueError, IndexError):
                 pass
-
-    return paginated_values, income, total_income
+    print(rows_loaded)
+    return paginated_values, rows_loaded, total_income, income
 
 def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
     creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -491,20 +481,16 @@ def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
                 "credentials.json", SCOPES
             )
             creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
 
     service = build("sheets", "v4", credentials=creds)
 
-    # Calculate the date 7 days ago
     seven_days_ago = datetime.now() - timedelta(days=7)
 
-    # Define the starting and ending row indices for pagination
     start_index = (page - 1) * 8 + 1
     end_index = start_index + 8
 
-    # Call the Sheets API to fetch data only for the last 7 days
     sheet = service.spreadsheets()
     result = (
         sheet.values()
@@ -513,8 +499,9 @@ def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
     )
     values = result.get("values", [])
 
-    # Filter and paginate data for the last 7 days
     filtered_values = []
+    rows_loaded = 0  # Initialize rows_loaded variable to track the number of rows loaded
+
     if values:
         filtered_values.append(values[0])  # Include the header row
         for row in values[1:]:
@@ -523,6 +510,7 @@ def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
                 if date_value >= seven_days_ago:
                     if start_index <= len(filtered_values) < end_index:
                         filtered_values.append(row)
+                        rows_loaded += 1  # Increment rows_loaded for each row processed
                     elif len(filtered_values) >= end_index:
                         break
             except (ValueError, IndexError):
@@ -536,16 +524,12 @@ def get_sheet_data_last_7_days(spreadsheet_id, range_name, page):
             except (ValueError, IndexError):
                 pass
     
-    return filtered_values, income, total_income
+    return filtered_values, rows_loaded, total_income, income
 
 def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
     creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -554,20 +538,16 @@ def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
                 "credentials.json", SCOPES
             )
             creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
 
     service = build("sheets", "v4", credentials=creds)
 
-    # Calculate the date 28 days ago
     twentyeight_days_ago = (datetime.now() - timedelta(days=28)).strftime('%Y-%m-%d')
 
-    # Define the starting and ending row indices for pagination
     start_index = (page - 1) * 8 + 1
     end_index = start_index + 8
 
-    # Call the Sheets API to fetch data only for the last 28 days
     sheet = service.spreadsheets()
     result = (
         sheet.values()
@@ -576,8 +556,9 @@ def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
     )
     values = result.get("values", [])
 
-    # Filter and paginate data for the last 28 days
     filtered_values = []
+    rows_loaded = 0  # Initialize rows_loaded variable to track the number of rows loaded
+
     if values:
         filtered_values.append(values[0])  # Include the header row
         for row in values[1:]:
@@ -586,6 +567,7 @@ def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
                 if date_value >= twentyeight_days_ago:
                     if start_index <= len(filtered_values) < end_index:
                         filtered_values.append(row)
+                        rows_loaded += 1  # Increment rows_loaded for each row processed
                     elif len(filtered_values) >= end_index:
                         break
             except (ValueError, IndexError):
@@ -599,7 +581,7 @@ def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
             except (ValueError, IndexError):
                 pass
 
-    return filtered_values, income, total_income
+    return filtered_values, rows_loaded, total_income, income
 
 if __name__ == "__main__":
     app.run(debug=True)
