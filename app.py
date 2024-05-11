@@ -588,6 +588,7 @@ def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
 
 def compute_total_income_all_pages(get_sheet_data_func, total_pages):
     total_income_all_pages = 0
+    total_pages = int(total_pages)
     
     for page in range(1, total_pages + 1):
         _, _, total_income, _ = get_sheet_data_func(page)
