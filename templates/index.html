@@ -139,7 +139,7 @@
                     <div>{{ page }}</div>
                     <div class="numberlabel2">{{ page + 1 }}</div>
                 </div>
-                {% if page <= 1 %}
+                {% if page >= 1 and expenses_loaded == 8 %}
                 {% if last_7_days %} 
                 <button class="next" onclick="goToPage({{ page + 1 }}, true, false)">Next</button>
                 {% elif last_28_days %}
