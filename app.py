@@ -50,27 +50,28 @@ def dashboard():
         username = current_user.id
         spreadsheet_id, range_name = get_spreadsheet_info(username)
         page = request.args.get('page', 1, type=int)
-        expenses, total_expenses, total_amount, _ = load_expenses(page)
+        expenses, total_expenses, total_amount, expenses_loaded = load_expenses(page)
 
         # Fetch total income from Google Sheets API
         if spreadsheet_id and range_name:
-            values, rows_loaded, total_income, income = get_sheet_data(spreadsheet_id, range_name, page=1)
+            total_income_all_pages = get_total_income_of_all_pages(spreadsheet_id, range_name)
         else:
-            total_income = 0  # Set total income to 0 if no spreadsheet info found
+            total_income_all_pages = 0  # Set total income to 0 if no spreadsheet info found
         
-        if total_income != 0 or total_amount != 0:    
-            total_combined = total_income + total_amount
+        if total_income_all_pages != 0 or total_amount != 0:    
+            total_combined = total_income_all_pages + total_amount
             if total_combined != 0:
-                total_income_percentage = round((total_income / total_combined) * 100)
+                total_income_percentage = round((total_income_all_pages / total_combined) * 100)
                 total_amount_percentage = round((total_amount / total_combined) * 100)
             else:
                 total_income_percentage = 0
                 total_amount_percentage = 0
         else:
             total_income_percentage = 0
-            total_amount_percentage = 0 
+            total_amount_percentage = 0
+            
         
-        return render_template('index-dashboard.html', total_income=total_income, total_amount=total_amount, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
+        return render_template('index-dashboard.html', total_income_all_pages=total_income_all_pages, total_amount=total_amount, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
     else:
         return redirect(url_for('login'))
 
