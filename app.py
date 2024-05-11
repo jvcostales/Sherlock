@@ -412,15 +412,18 @@ def income():
     if last_7_days:
         # Fetch data for the last 7 days
         values, rows_loaded, total_income, income = get_sheet_data_last_7_days(spreadsheet_id, range_name, page)
+        total_income_all_pages = compute_total_income_all_pages(get_sheet_data_last_7_days, total_income)
 
     elif last_28_days:
         values, rows_loaded, total_income, income = get_sheet_data_last_28_days(spreadsheet_id, range_name, page)
+        total_income_all_pages = compute_total_income_all_pages(get_sheet_data_last_28_days, total_income)
 
     else:
         # Fetch all data
         values, rows_loaded, total_income, income = get_sheet_data(spreadsheet_id, range_name, page)
+        total_income_all_pages = compute_total_income_all_pages(get_sheet_data, total_income)
     
-    return render_template("index-income.html", values=values, rows_loaded=rows_loaded, income=income, total_income=total_income, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
+    return render_template("index-income.html", values=values, rows_loaded=rows_loaded, income=income, total_income=total_income_all_pages, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 def get_sheet_data(spreadsheet_id, range_name, page):
     creds = None
@@ -582,6 +585,15 @@ def get_sheet_data_last_28_days(spreadsheet_id, range_name, page):
                 pass
 
     return filtered_values, rows_loaded, total_income, income
+
+def compute_total_income_all_pages(get_sheet_data_func, total_pages):
+    total_income_all_pages = 0
+    
+    for page in range(1, total_pages + 1):
+        _, _, total_income, _ = get_sheet_data_func(page)
+        total_income_all_pages += total_income
+    
+    return total_income_all_pages
 
 if __name__ == "__main__":
     app.run(debug=True)
