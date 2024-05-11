@@ -105,7 +105,6 @@ from flask import render_template
 @app.route('/expenses')
 def expenses():
     if current_user.is_authenticated:
-        username = current_user.id
         page = request.args.get('page', 1, type=int)
         last_7_days = request.args.get('last_7_days', False, type=bool)
         last_28_days = request.args.get('last_28_days', False, type=bool)
@@ -120,7 +119,7 @@ def expenses():
             expenses, total_expenses, total_amount, expenses_loaded = load_expenses(page)
             total_amount_all_pages = compute_total_amount_all_pages(load_expenses, total_expenses)
         
-        return render_template('index.html', username=username, expenses=expenses, page=page, total_expenses=total_expenses, total_amount=total_amount_all_pages, expenses_loaded=expenses_loaded, last_7_days=last_7_days, last_28_days=last_28_days)
+        return render_template('index.html', expenses=expenses, page=page, total_expenses=total_expenses, total_amount=total_amount_all_pages, expenses_loaded=expenses_loaded, last_7_days=last_7_days, last_28_days=last_28_days)
     else:
         return redirect(url_for('login'))
 
@@ -454,7 +453,7 @@ def income():
 
     total_income_all_pages = get_total_income_of_all_pages(spreadsheet_id, range_name)
 
-    return render_template("index-income.html", values=values, rows_loaded=rows_loaded, income=income, total_income=total_income, total_income_all_pages=total_income_all_pages, page=page, last_7_days=last_7_days, last_28_days=last_28_days, username=username)
+    return render_template("index-income.html", values=values, rows_loaded=rows_loaded, income=income, total_income=total_income, total_income_all_pages=total_income_all_pages, page=page, last_7_days=last_7_days, last_28_days=last_28_days)
 
 
 @lru_cache(maxsize=None)

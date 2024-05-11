@@ -210,12 +210,6 @@ li {
     display: block;
 }
 
-.space1 {
-    width: 200px;
-    height: 5px;
-    background-image: url(static/background.png);
-    background-repeat: no-repeat;
-}
 
 .usernamedisplay {
     font-size: 1.5rem;
