@@ -50,7 +50,9 @@ def dashboard():
         username = current_user.id
         spreadsheet_id, range_name = get_spreadsheet_info(username)
         page = request.args.get('page', 1, type=int)
+        
         expenses, total_expenses, total_amount, expenses_loaded = load_expenses(page)
+        total_amount_all_pages = compute_total_amount_all_pages(load_expenses, total_expenses)
 
         # Fetch total income from Google Sheets API
         if spreadsheet_id and range_name:
@@ -71,7 +73,7 @@ def dashboard():
             total_amount_percentage = 0
             
         
-        return render_template('index-dashboard.html', total_income_all_pages=total_income_all_pages, total_amount=total_amount, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
+        return render_template('index-dashboard.html', total_income_all_pages=total_income_all_pages, total_amount=total_amount_all_pages, total_income_percentage=total_income_percentage, total_amount_percentage=total_amount_percentage, username=username)
     else:
         return redirect(url_for('login'))
 
