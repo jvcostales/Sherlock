@@ -4,7 +4,7 @@ body {
     display: flex;
 }
 
-.left {
+.right {
     float: left;
     width: 50vw;
     height:100vh;
@@ -16,7 +16,7 @@ body {
     box-sizing: border-box;
 }
 
-.right {
+.left {
     float: right;
     width: 50vw;
     height:100vh;
@@ -98,20 +98,20 @@ input[type=submit] {
 
 /* Media query for smaller screens */
 @media screen and (max-width: 768px) {
-    .right {
+    .left {
         float: none;
         width: 100%;
     }
-    .left {
+    .eright {
         display: none;
     }
 }
 
 @media screen and (max-width: 1200px) {
-    .right {
+    .left {
         width: 60vw;
     }
-    .left {
+    .right {
         width: 40vw;
         display: flex;
         align-items: center;
@@ -123,7 +123,7 @@ input[type=submit] {
     height: 200px;
 }
 
-.left {
+.right {
     display: flex;
     align-items: center;
 }

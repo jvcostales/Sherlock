@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style-login.css') }}">
-    <title>Login</title>
+    <title>Sherlock Login</title>
 </head>
 
 <body>
     <div class="left">
+        <img src="..\static\logo.png" class="logo">
     </div>
     <div class="right">
         <div class="login">
@@ -40,7 +41,7 @@
             else if (screenWidth > 768 && screenWidth <= 1200) {
                 document.querySelector('.right').style.width = '60vw';
                 document.querySelector('.left').style.width = '40vw';
-                document.querySelector('.left').style.display = 'block'; // Ensure left is visible
+                document.querySelector('.left').style.display = 'flex'; // Ensure left is visible
             }
             // Reset styles for screen widths larger than 1200px
             else {
