@@ -158,7 +158,7 @@ def signup():
             users[username] = {'username': username, 'password': generate_password_hash(password)}
             
             # Append user information to the CSV file if it doesn't exist
-            csv_path = os.path.join("users.csv")
+            csv_path = os.path.join(RENDER_DISK_PATH, "users.csv")
             if not os.path.exists(csv_path):
                 with open(csv_path, "w") as f:
                     f.write("Username,Password\n")
@@ -168,7 +168,7 @@ def signup():
             
             # Create a unique CSV file for the user
             user_csv_filename = f"{username}_expenses.csv"
-            user_csv_path = os.path.join(user_csv_filename)
+            user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
             if not os.path.exists(user_csv_path):
                 with open(user_csv_path, "w") as f:
                     # Write header to the CSV file
@@ -181,7 +181,7 @@ def signup():
 
 def load_user_info():
     user_info = {}
-    csv_path = "users.csv"
+    csv_path = "/mnt/render-disk/users.csv"
     if os.path.exists(csv_path):
         with open(csv_path, "r") as f:
             lines = f.readlines()
@@ -255,7 +255,7 @@ def load_expenses(page):
     user_csv_filename = f"{username}_expenses.csv"
 
     # Construct the full path to the user's expenses CSV file
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
 
     # Initialize variables to store expenses data
     expenses = []  # List to hold Expense objects
@@ -300,7 +300,7 @@ def load_expenses(page):
 def load_expenses_last_7_days(page):
     username = current_user.id
     user_csv_filename = f"{username}_expenses.csv"
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
     
     expenses_per_page = 8
     start_index = (page - 1) * expenses_per_page
@@ -333,7 +333,7 @@ def load_expenses_last_7_days(page):
 def load_expenses_last_28_days(page):
     username = current_user.id
     user_csv_filename = f"{username}_expenses.csv"
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
     
     expenses_per_page = 8
     start_index = (page - 1) * expenses_per_page
@@ -375,7 +375,7 @@ def compute_total_amount_all_pages(load_expenses_func, total_pages):
 def save_expense(expense):
     username = current_user.id
     user_csv_filename = f"{username}_expenses.csv"
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
     
     with open(user_csv_path, "a") as f:
         f.write(f"{expense.material},{expense.quantity},{expense.price},{expense.total},"
@@ -384,7 +384,7 @@ def save_expense(expense):
 def delete_expense(random_id):
     username = current_user.id
     user_csv_filename = f"{username}_expenses.csv"
-    user_csv_path = os.path.join(user_csv_filename)
+    user_csv_path = os.path.join(RENDER_DISK_PATH, user_csv_filename)
     
     with open(user_csv_path, "r") as f:
         lines = f.readlines()   
@@ -398,7 +398,7 @@ def delete_expense(random_id):
 
 def get_spreadsheet_info(username):
     user_info_filename = f"{username}_spreadsheet.csv"
-    user_info_path = os.path.join(user_info_filename)
+    user_info_path = os.path.join(RENDER_DISK_PATH, user_info_filename)
 
     try:
         with open(user_info_path, "r") as file:
@@ -409,7 +409,7 @@ def get_spreadsheet_info(username):
 
 def save_spreadsheet_info(username, spreadsheet_id, range_name):
     user_info_filename = f"{username}_spreadsheet.csv"
-    user_info_path = os.path.join(user_info_filename)
+    user_info_path = os.path.join(RENDER_DISK_PATH, user_info_filename)
 
     with open(user_info_path, "w") as f:
         f.write(f"{spreadsheet_id},{range_name}\n")
